@@ -1,10 +1,10 @@
-import React, { useState, useRef } from "react";
+import { FC, useState, useRef } from "react";
 import { Howl } from "howler";
 import BPMControl from "./BPMControl";
 import BeatControl from "./BeatControl";
 import StartStopButton from "./StartStopButton";
 
-const Metronome: React.FC = () => {
+const Metronome: FC = () => {
   const [bpm, setBpm] = useState(120);
   const [beatsPerMeasure, setBeatsPerMeasure] = useState(4);
   const [isRunning, setIsRunning] = useState(false);

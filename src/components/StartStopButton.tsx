@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { Button } from "@mui/material";
 
 interface StartStopButtonProps {
@@ -6,7 +6,7 @@ interface StartStopButtonProps {
   onClick: () => void;
 }
 
-const StartStopButton: React.FC<StartStopButtonProps> = ({ isRunning, onClick }) => {
+const StartStopButton: FC<StartStopButtonProps> = ({ isRunning, onClick }) => {
   return (
     <Button variant="contained" color={isRunning ? "secondary" : "primary"} onClick={onClick}>
       {isRunning ? "Stop" : "Start"}

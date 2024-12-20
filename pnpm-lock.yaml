@@ -36,6 +36,9 @@ importers:
       '@eslint/js':
         specifier: ^9.17.0
         version: 9.17.0
+      '@types/howler':
+        specifier: ^2.2.12
+        version: 2.2.12
       '@types/react':
         specifier: ^18.3.17
         version: 18.3.18
@@ -641,6 +644,9 @@ packages:
 
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
+
+  '@types/howler@2.2.12':
+    resolution: {integrity: sha512-hy769UICzOSdK0Kn1FBk4gN+lswcj1EKRkmiDtMkUGvFfYJzgaDXmVXkSShS2m89ERAatGIPnTUlp2HhfkVo5g==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -1890,6 +1896,8 @@ snapshots:
       '@babel/types': 7.26.3
 
   '@types/estree@1.0.6': {}
+
+  '@types/howler@2.2.12': {}
 
   '@types/json-schema@7.0.15': {}
 

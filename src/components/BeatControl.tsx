@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 interface BeatControlProps {
@@ -6,7 +6,7 @@ interface BeatControlProps {
   onChange: (value: number) => void;
 }
 
-const BeatControl: React.FC<BeatControlProps> = ({ beatsPerMeasure, onChange }) => {
+const BeatControl: FC<BeatControlProps> = ({ beatsPerMeasure, onChange }) => {
   return (
     <FormControl fullWidth>
       <InputLabel>Beats per Measure</InputLabel>
