@@ -1,5 +1,10 @@
 import React from "react";
 import { Slider, Typography } from "@mui/material";
+import { css } from "@linaria/core";
+
+const bpmControlContainer = css`
+  width: 100%;
+`
 
 interface BPMControlProps {
   bpm: number;
@@ -13,7 +18,7 @@ const BPMControl: React.FC<BPMControlProps> = ({ bpm, onChange }) => {
     onChange(value as number)
   }
   return (
-    <div>
+    <div className={bpmControlContainer}>
       <Typography variant="h6">BPM: {bpm}</Typography>
       <Slider
         min={40}
