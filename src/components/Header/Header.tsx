@@ -6,8 +6,8 @@ const headerContainer = css`
 `
 export const Header = () => {
     return (
-        <div className={headerContainer}>
+        <header className={headerContainer}>
             header
-        </div>
+        </header>
     )
 }

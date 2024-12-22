@@ -14,11 +14,12 @@ const appContainer = css`
 const headerFooter = css`
   flex-shrink: 0; /* Prevent shrinking */
   height: 60px; /* Fixed height for header/footer */
-  background-color: #282c34; /* Example background color */
-  color: white;
+  // background-color: #282c34; /* Example background color */
+  color: black;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 2px solid red;
 `;
 
 const mainContent = css`
