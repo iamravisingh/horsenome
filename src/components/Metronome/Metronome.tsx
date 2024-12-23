@@ -4,6 +4,7 @@ import { Howl } from "howler";
 import BPMControl from "./BPMControl";
 import BeatControl from "./BeatControl";
 import StartStopButton from "./StartStopButton";
+// import TickTockAnimation from "../TickTock";
 
 const metronomeSection = css`
   display: flex;
@@ -25,6 +26,7 @@ const Metronome: FC = () => {
   const [bpm, setBpm] = useState(120);
   const [beatsPerMeasure, setBeatsPerMeasure] = useState(4);
   const [isRunning, setIsRunning] = useState(false);
+  // const [isTick, setIsTick] = useState(true);
   const intervalRef = useRef<null | number>(null);
 
   const tickSound = new Howl({ src: ["/sounds/tick.mp3"] });
@@ -40,8 +42,10 @@ const Metronome: FC = () => {
       // If the remainder is 0, it means count corresponds to the first beat in the measu
       if (count % beatsPerMeasure === 0) {
         tickSound.play(); // Accent sound
+        // setIsTick(true);
       } else {
         tockSound.play(); // Regular sound
+        // setIsTick(false);
       }
       // (count + 1) increments the beat.
       // % beatsPerMeasure ensures the count resets to 0 after reaching the total number of beats in the measure.
@@ -57,7 +61,8 @@ const Metronome: FC = () => {
   return (
     <div className={metronomeSection}>
       <div className={metronomeContainer}>
-        <BPMControl bpm={bpm} onChange={setBpm} />
+        {/* <TickTockAnimation isRunning={isTick}/> */}
+        <BPMControl bpm={bpm} onChange={setBpm} isRunning={isRunning}/>
         <BeatControl
           beatsPerMeasure={beatsPerMeasure}
           onChange={setBeatsPerMeasure}

@@ -7,7 +7,7 @@ const headerContainer = css`
 export const Header = () => {
     return (
         <header className={headerContainer}>
-            header
+            Horsenome
         </header>
     )
 }
