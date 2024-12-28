@@ -1,7 +1,13 @@
 import { FC } from "react";
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import OutlinedInput from '@mui/material/OutlinedInput';
-import ClapIcon  from "../../assets/clapping-hands.svg";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import ClapIcon from "../../assets/clapping-hands.svg";
 
 interface BeatControlProps {
   beatsPerMeasure: number;
@@ -16,11 +22,15 @@ const BeatControl: FC<BeatControlProps> = ({ beatsPerMeasure, onChange }) => {
 
   return (
     <FormControl size="medium">
-      <InputLabel id="bpm-input" sx={{ display: "flex", alignItems: "center" }}>
-        <img src={ClapIcon} style={{ width: 40, height: 40  }} />
+      <InputLabel
+        id="bpm-input"
+        sx={{ display: "flex", alignItems: "center" }}
+      >
+        <img src={ClapIcon} style={{ width: 40, height: 40 }} />
       </InputLabel>
       <Select
         id="bpm-input"
+        size="medium"
         value={beatsPerMeasure}
         label="Beats"
         onChange={handleChange}
@@ -34,7 +44,9 @@ const BeatControl: FC<BeatControlProps> = ({ beatsPerMeasure, onChange }) => {
           },
         }}
       >
-        <MenuItem disabled>Beats <img src={ClapIcon} style={{ width: 30, height: 30  }} /></MenuItem>
+        <MenuItem disabled>
+          Beats <img src={ClapIcon} style={{ width: 30, height: 30 }} />
+        </MenuItem>
         {Array.from({ length: 16 }, (_, i) => i + 1).map((beat) => (
           <MenuItem key={beat} value={beat}>
             {beat}

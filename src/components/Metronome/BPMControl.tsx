@@ -3,19 +3,27 @@ import { Slider, Typography } from "@mui/material";
 import { css } from "@linaria/core";
 import { motion } from "framer-motion";
 
+// import FloatingActionButtons from "./FloatingButton";
+
 const bpmControlContainer = css`
   width: 100%;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
   align-items: center;
-  gap: 16px;
+  width: 85%;
 `;
 
+const bpmSlider = css`
+    width: 73% !important;
+`
+
 const bpmDisplayContainer = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
+  font-size: 10px;
+`;
+
+const bpmCount = css`
+  font-size: 10px;
 `;
 
 interface BPMControlProps {
@@ -24,7 +32,11 @@ interface BPMControlProps {
   isRunning: boolean;
 }
 
-const BPMControl: React.FC<BPMControlProps> = ({ bpm, onChange, isRunning }) => {
+const BPMControl: React.FC<BPMControlProps> = ({
+  bpm,
+  onChange,
+  isRunning,
+}) => {
   const handleOnChange = (e: Event, value: number | number[]) => {
     onChange(value as number);
   };
@@ -34,34 +46,13 @@ const BPMControl: React.FC<BPMControlProps> = ({ bpm, onChange, isRunning }) => 
 
   return (
     <div className={bpmControlContainer}>
-      <motion.div
-        className={bpmDisplayContainer}
-        animate={{ scale: isRunning ? 1.2 : 1 }}
-        transition={{ duration: 0.2, type: "spring" }}
-      >
-        {/* <Typography variant="h6">BPM:</Typography> */}
-        <motion.div
-          animate={{ y: [0, -5, 0] }}
-          // transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
-        >
-          <Typography variant="h4" color="success.main">
-            {bpm}
-          </Typography>
-        </motion.div>
-      </motion.div>
-
-      {/* <div>
-        <Button variant="contained" color="success" onClick={decreaseBPM}>
-          -
-        </Button>
-        <Button variant="contained" color="success" onClick={increaseBPM}>
-          +
-        </Button>
-      </div> */}
-
+      {/* <FloatingActionButtons /> */}
       <Slider
+        className={bpmSlider}
         defaultValue={50}
-        min={40}
+        // marks
+        // step={10}
+        min={10}
         max={240}
         color="success"
         value={bpm}
@@ -69,8 +60,20 @@ const BPMControl: React.FC<BPMControlProps> = ({ bpm, onChange, isRunning }) => 
         valueLabelDisplay="auto"
         aria-label="bpm-control"
         aria-valuetext="current bpm count"
-        step={1}
       />
+      <motion.div
+        className={bpmDisplayContainer}
+        animate={{ scale: isRunning ? 1.2 : 1 }}
+        transition={{ duration: 0.2, type: "spring" }}
+      >
+        {/* <Typography variant="h6">BPM:</Typography> */}
+        <motion.div animate={{ y: [0, -5, 0] }} className={bpmCount}>
+          {/* // add tooltip for user to understand what is count */}
+          <Typography variant="h6" color="success.main">
+            {bpm}
+          </Typography>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };

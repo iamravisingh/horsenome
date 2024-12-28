@@ -1,16 +1,26 @@
-import { FC, createContext, useContext, useState, useEffect } from "react";
+import { FC, createContext, useContext, useState, ReactNode } from "react";
 
-interface IMetronomeContextProps {
-    bpm: number
+interface IMetronomeContext {
+  bpm: number;
+  setBpm: (bpm: number) => void;
 }
 
-const MetronomeContext = createContext<any>({} as unknown as IMetronomeContextProps);
+const MetronomeContext = createContext<IMetronomeContext | undefined>(undefined);
 
-export const MetronomeProvider: FC <IMetronomeContextProps> = (props) => {
-    const { children } = props;
-    return (
-        <MetronomeContext.Provider>
+export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const [bpm, setBpm] = useState(120); 
 
-        </MetronomeContext.Provider>
-    )
-}
+  return (
+    <MetronomeContext.Provider value={{ bpm, setBpm }}>
+      {children}
+    </MetronomeContext.Provider>
+  );
+};
+
+export const useMetronome = () => {
+  const context = useContext(MetronomeContext);
+  if (!context) {
+    throw new Error("useMetronome must be used within a MetronomeProvider");
+  }
+  return context;
+};

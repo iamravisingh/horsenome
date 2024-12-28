@@ -4,7 +4,7 @@ import { Howl } from "howler";
 import BPMControl from "./BPMControl";
 import BeatControl from "./BeatControl";
 import StartStopButton from "./StartStopButton";
-// import TickTockAnimation from "../TickTock";
+import TickTockAnimation from "../TickTock";
 
 const metronomeSection = css`
   display: flex;
@@ -12,15 +12,22 @@ const metronomeSection = css`
   width: 100%;
   justify-content: space-evenly;
   gap: 20px;
-  border: 2px solid red
+  // border: 2px solid red;
+  box-sizing: border-box;
 `;
 const metronomeContainer = css`
   display: flex;
-  gap: 10px;
-  width: 50%;
-  align-items: center;
-  flex-direction: column;
+  // gap: 10px;
+  width: 100%;
+  align-items: flex-end;
+  justify-content: end;
 `;
+
+const metronomeBpmSection = css`
+  width: 100%;
+  display: flex;
+  gap: 20px;
+`
 
 const Metronome: FC = () => {
   const [bpm, setBpm] = useState(120);
@@ -29,8 +36,14 @@ const Metronome: FC = () => {
   // const [isTick, setIsTick] = useState(true);
   const intervalRef = useRef<null | number>(null);
 
-  const tickSound = new Howl({ src: ["/sounds/tick.mp3"] });
-  const tockSound = new Howl({ src: ["/sounds/tock.mp3"] });
+  const tickSound = new Howl({ 
+    src: ["/sounds/tick.mp3"],
+    html5: true,
+  });
+  const tockSound = new Howl({ 
+    src: ["/sounds/tock.mp3"],
+    html5: true,
+  });
 
   const startMetronome = () => {
     if (isRunning) return;
@@ -55,25 +68,27 @@ const Metronome: FC = () => {
 
   const stopMetronome = () => {
     setIsRunning(false);
+    Howler.stop();
     if (intervalRef.current) clearInterval(intervalRef.current);
   };
 
   return (
     <div className={metronomeSection}>
+      <div>
+        <TickTockAnimation isRunning={isRunning} bpm={bpm}/>
+        <div className={metronomeBpmSection}>
+          <BPMControl bpm={bpm} onChange={setBpm} isRunning/>
+          <BeatControl
+            beatsPerMeasure={beatsPerMeasure}
+            onChange={setBeatsPerMeasure}
+          />
+        </div>
+      </div>
       <div className={metronomeContainer}>
-        {/* <TickTockAnimation isRunning={isTick}/> */}
-        <BPMControl bpm={bpm} onChange={setBpm} isRunning={isRunning}/>
-        <BeatControl
-          beatsPerMeasure={beatsPerMeasure}
-          onChange={setBeatsPerMeasure}
-        />
         <StartStopButton
           isRunning={isRunning}
           onClick={isRunning ? stopMetronome : startMetronome}
         />
-      </div>
-      <div>
-        visual animation component coming soon... 
       </div>
     </div>
   );

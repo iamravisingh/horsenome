@@ -1,15 +1,17 @@
 import { css } from "@linaria/core";
 
 const footerContainer = css`
-  width: 100%;
+  width: fit-content;
   padding: 1rem;
   text-align: center;
   font-size: 1rem;
   color: #6c757d;
   position: fixed;
   bottom: 0;
-  background-color: #f8f9fa; /* Light background for better readability */
+//   background-color: #f8f9fa; /* Light background for better readability */
   border-top: 1px solid #e9ecef; /* Subtle border for separation */
+    // border: 2px solid red;
+  box-sizing: border-box;
   
 `;
 
@@ -21,13 +23,13 @@ const descriptionText = css`
 
 export const Footer = () => {
   return (
-    <footer className={footerContainer}>
+    <div className={footerContainer}>
       "<i>Horsenome</i>" Made with ❤️
       <div className={descriptionText}>
         Horsenome brings the rhythm of nature into music, inspired by the steady
         gallop of a horse 🐎 and the resonant beats of the dholak's thappi. Feel
         the rhythm, embrace the melody, and let your creativity flow!
       </div>
-    </footer>
+    </div>
   );
 };

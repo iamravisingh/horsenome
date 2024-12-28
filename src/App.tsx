@@ -3,6 +3,7 @@ import { Container } from "@mui/material";
 import { css } from "@linaria/core";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
+import { MetronomeProvider } from "./components/Metronome/MetronomeProvider";
 import './App.css'
 
 const appContainer = css`
@@ -19,7 +20,7 @@ const headerFooter = css`
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid red;
+  // border: 2px solid red;
 `;
 
 const mainContent = css`
@@ -38,7 +39,9 @@ function App() {
         <Header />
       </div>
       <div className={mainContent}>
-        <Metronome />
+        <MetronomeProvider>
+          <Metronome />
+        </MetronomeProvider>
       </div>
       <div className={headerFooter}>
         <Footer />
