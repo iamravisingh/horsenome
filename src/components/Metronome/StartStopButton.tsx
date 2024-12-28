@@ -1,19 +1,17 @@
-import { FC } from "react";
 import { IconButton } from "@mui/material";
 import Start from "../../assets/music-player-start.svg";
 import Stop from "../../assets/music-player-stop.svg";
 import { css } from "@linaria/core";
+import { useMetronome } from "./MetronomeProvider";
 
 const playButtonStyle = css`
   top: 18px
 `
-interface StartStopButtonProps {
-  isRunning: boolean;
-  onClick: () => void;
-}
 
-const StartStopButton: FC<StartStopButtonProps> = ({ isRunning, onClick }) => {
+const StartStopButton = () => {
+  const { isRunning, startMetronome, stopMetronome } = useMetronome();
   const playButton = isRunning ? Stop : Start;
+  const onClick = isRunning ? stopMetronome : startMetronome 
   return (
     <IconButton onClick={onClick}
     className={playButtonStyle}

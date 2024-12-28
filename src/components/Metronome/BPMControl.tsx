@@ -1,7 +1,7 @@
-import React from "react";
 import { Slider, Typography } from "@mui/material";
 import { css } from "@linaria/core";
 import { motion } from "framer-motion";
+import { useMetronome } from "./MetronomeProvider";
 
 // import FloatingActionButtons from "./FloatingButton";
 
@@ -26,19 +26,11 @@ const bpmCount = css`
   font-size: 10px;
 `;
 
-interface BPMControlProps {
-  bpm: number;
-  onChange: (value: number) => void;
-  isRunning: boolean;
-}
 
-const BPMControl: React.FC<BPMControlProps> = ({
-  bpm,
-  onChange,
-  isRunning,
-}) => {
+const BPMControl = () => {
+  const { bpm, isRunning, setBpm } = useMetronome();
   const handleOnChange = (e: Event, value: number | number[]) => {
-    onChange(value as number);
+    setBpm(value as number)
   };
 
   // const increaseBPM = () => onChange(Math.min(bpm + 5, 240)); // Max BPM 240
