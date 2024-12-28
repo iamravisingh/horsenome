@@ -9,7 +9,6 @@ interface IMetronomeContext {
   stopMetronome: () => void;
   beatsPerMeasure: number;
   setBeatsPerMeasure: (beats: number) => void;
-  // we can pass "intervalRef" to child component. 
 }
 
 const MetronomeContext = createContext<IMetronomeContext | undefined>(undefined);
@@ -21,36 +20,44 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
   const intervalRef = useRef<number | null>(null);
   const countRef = useRef(0); // Keep track of the beat count
 
-  const tickSound = new Howl({ src: ["/sounds/tick.mp3"], html5: true });
-  const tockSound = new Howl({ src: ["/sounds/tock.mp3"], html5: true });
+  const tickSound = useRef(
+    new Howl({ src: ["/sounds/tick.mp3"], preload: true, html5: true })
+  ).current;
+  const tockSound = useRef(
+    new Howl({ src: ["/sounds/tock.mp3"], preload: true, html5: true })
+  ).current;
 
-  // Method to start the metronome interval
+  const playSound = () => {
+    if (countRef.current % beatsPerMeasure === 0) {
+      // Accent sound    
+      tickSound.play(); 
+    } else {
+      // Regular sound         
+      tockSound.play(); 
+    }
+    countRef.current = (countRef.current + 1) % beatsPerMeasure;
+  };
+
   const startInterval = () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
+
     intervalRef.current = window.setInterval(() => {
-      if (countRef.current % beatsPerMeasure === 0) {
-        // Accent sound
-        tickSound.play(); 
-      } else {
-        // Regular sound
-        tockSound.play(); 
-      }
-      countRef.current = (countRef.current + 1) % beatsPerMeasure;
+      playSound();
     }, (60 / bpm) * 1000);
   };
 
-  // Method to start the metronome
   const startMetronome = () => {
     if (isRunning) return;
     setIsRunning(true);
-    // Reset count when starting
+    // Reset beat count
     countRef.current = 0; 
+    playSound();
     startInterval();
   };
 
-  // Method to stop the metronome
   const stopMetronome = () => {
     setIsRunning(false);
+    // Stop all sounds
     Howler.stop();
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -58,14 +65,14 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
     }
   };
 
-  // Effect to update the interval when BPM changes
+  // Restart the interval on BPM or measure change    
   useEffect(() => {
     if (isRunning) {
-      // Restart the interval with the updated BPM
+          
       startInterval(); 
     }
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current); // Clean up interval
+      if (intervalRef.current) clearInterval(intervalRef.current); // Cleanup interval
     };
   }, [bpm, beatsPerMeasure]);
 
