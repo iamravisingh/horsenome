@@ -2,7 +2,7 @@ import { IconButton } from "@mui/material";
 import Start from "../../assets/music-player-start.svg";
 import Stop from "../../assets/music-player-stop.svg";
 import { css } from "@linaria/core";
-import { useMetronome } from "./MetronomeProvider";
+import { useMetronome } from "../../hooks/useMetronome";
 
 const playButtonStyle = css`
   top: 18px

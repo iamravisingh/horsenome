@@ -1,7 +1,7 @@
 import { Slider, Typography } from "@mui/material";
 import { css } from "@linaria/core";
 import { motion } from "framer-motion";
-import { useMetronome } from "./MetronomeProvider";
+import { useMetronome } from "../../hooks/useMetronome";
 
 // import FloatingActionButtons from "./FloatingButton";
 
@@ -30,7 +30,9 @@ const bpmCount = css`
 const BPMControl = () => {
   const { bpm, isRunning, setBpm } = useMetronome();
   const handleOnChange = (e: Event, value: number | number[]) => {
-    setBpm(value as number)
+    const beat = value as number;
+    setBpm(beat);
+    // setBeatsPerMeasure(beat);
   };
 
   // const increaseBPM = () => onChange(Math.min(bpm + 5, 240)); // Max BPM 240

@@ -4,7 +4,6 @@ import BPMControl from "./BPMControl";
 import BeatControl from "./BeatControl";
 import StartStopButton from "./StartStopButton";
 import TickTockAnimation from "../TickTock";
-import { useMetronome } from "./MetronomeProvider";
 
 const metronomeSection = css`
   display: flex;
@@ -35,10 +34,7 @@ const metronomeAnimateContainer = css`
 `;
 
 const Metronome: FC = () => {
-  const {
-    beatsPerMeasure,
-    setBeatsPerMeasure,
-  } = useMetronome();
+
 
   return (
     <div className={metronomeSection}>
@@ -46,10 +42,7 @@ const Metronome: FC = () => {
         <TickTockAnimation />
         <div className={metronomeBpmSection}>
           <BPMControl />
-          <BeatControl
-            beatsPerMeasure={beatsPerMeasure}
-            onChange={setBeatsPerMeasure}
-          />
+          <BeatControl />
         </div>
       </div>
       <div className={metronomeContainer}>

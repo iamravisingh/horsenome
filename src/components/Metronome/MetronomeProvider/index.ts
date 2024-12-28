@@ -1,1 +1,1 @@
-export { MetronomeProvider, useMetronome } from "./MetronomeContext";
+export { MetronomeProvider, metronomeContext } from "./MetronomeContext";

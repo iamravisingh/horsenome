@@ -1,4 +1,3 @@
-import { FC } from "react";
 import {
   FormControl,
   InputLabel,
@@ -8,16 +7,16 @@ import {
 } from "@mui/material";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import ClapIcon from "../../assets/clapping-hands.svg";
+import { useMetronome } from "../../hooks/useMetronome";
 
-interface BeatControlProps {
-  beatsPerMeasure: number;
-  onChange: (value: number) => void;
-}
-
-const BeatControl: FC<BeatControlProps> = ({ beatsPerMeasure, onChange }) => {
+const BeatControl = () => {
+  const {
+    setBeatsPerMeasure,
+    beatsPerMeasure
+  } = useMetronome();
   const handleChange = (e: SelectChangeEvent<unknown>) => {
     const val = parseInt(e.target.value as string, 10);
-    onChange(val);
+    setBeatsPerMeasure(val);
   };
 
   return (

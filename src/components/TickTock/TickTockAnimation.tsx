@@ -1,7 +1,6 @@
 import { css } from "@linaria/core";
 import SiriWave from "react-siriwave";
-import { useMetronome } from "../Metronome/MetronomeProvider";
-
+import { useMetronome } from "../../hooks/useMetronome";
 
 const siriWaveBackground = css`
   width: 100%;
