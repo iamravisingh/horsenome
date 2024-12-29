@@ -8,9 +8,8 @@ const footerContainer = css`
   color: #6c757d;
   position: fixed;
   bottom: 0;
-//   background-color: #f8f9fa; /* Light background for better readability */
-  border-top: 1px solid #e9ecef; /* Subtle border for separation */
-    // border: 2px solid red;
+  text-wrap: balance;
+  border-top: 1px solid #e9ecef;
   box-sizing: border-box;
   
 `;

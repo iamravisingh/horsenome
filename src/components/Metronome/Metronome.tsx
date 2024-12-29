@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { css } from "@linaria/core";
 import BPMControl from "./BPMControl";
 import BeatControl from "./BeatControl";
@@ -31,11 +30,10 @@ const metronomeAnimateContainer = css`
   display: flex;
   width: 100%;
   flex-direction: column;
+  gap: 10px;
 `;
 
-const Metronome: FC = () => {
-
-
+const Metronome = () => {
   return (
     <div className={metronomeSection}>
       <div className={metronomeAnimateContainer}>

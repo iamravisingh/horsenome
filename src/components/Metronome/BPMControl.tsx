@@ -3,19 +3,17 @@ import { css } from "@linaria/core";
 import { motion } from "framer-motion";
 import { useMetronome } from "../../hooks/useMetronome";
 
-// import FloatingActionButtons from "./FloatingButton";
-
 const bpmControlContainer = css`
   width: 100%;
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  align-items: center;
-  width: 85%;
+  align-items: end;
+  width: 100%;
 `;
 
 const bpmSlider = css`
-    width: 73% !important;
+    width: 100% !important;
 `
 
 const bpmDisplayContainer = css`
@@ -30,6 +28,7 @@ const bpmCount = css`
 const BPMControl = () => {
   const { bpm, isRunning, setBpm } = useMetronome();
   const handleOnChange = (e: Event, value: number | number[]) => {
+    console.log("e inside handleOnChange >>>>>>>", e);
     const beat = value as number;
     setBpm(beat);
     // setBeatsPerMeasure(beat);
