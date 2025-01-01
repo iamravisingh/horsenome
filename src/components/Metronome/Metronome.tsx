@@ -1,19 +1,19 @@
 import { css } from "@linaria/core";
+import Grid from "@mui/material/Grid2";
+import Divider from "@mui/material/Divider";
 import BPMControl from "./BPMControl";
 import BeatControl from "./BeatControl";
 import StartStopButton from "./StartStopButton";
 import TickTockAnimation from "../TickTock";
 
 const metronomeSection = css`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-evenly;
-  gap: 20px;
   box-sizing: border-box;
+  background: linear-gradient(to bottom, #f9f9f9, #eaeaea);
+  border-radius: 10px;
+  padding: 20px;
 `;
 
-const metronomeContainer = css`
+const metronomeStartButtonContainer = css`
   display: flex;
   width: 100%;
   align-items: flex-end;
@@ -24,29 +24,56 @@ const metronomeBpmSection = css`
   width: 100%;
   display: flex;
   gap: 20px;
+  align-items: end;
 `;
 
 const metronomeAnimateContainer = css`
-  display: flex;
   width: 100%;
-  flex-direction: column;
   gap: 10px;
+`;
+
+const divider = css`
+  margin: 20px 0;
+  background-color: #d3d3d3; /* Light gray for contrast */
+  height: 2px;
 `;
 
 const Metronome = () => {
   return (
-    <div className={metronomeSection}>
-      <div className={metronomeAnimateContainer}>
+    <Grid
+      container
+      className={metronomeSection}
+      spacing={{ xs: 2, md: 3 }}
+      columns={{ xs: 4, sm: 8, md: 12 }}
+    >
+      <Grid
+        container
+        className={metronomeAnimateContainer}
+        size={{ xs: 12, sm: 8, md: 12 }}
+      >
         <TickTockAnimation />
-        <div className={metronomeBpmSection}>
-          <BPMControl />
-          <BeatControl />
-        </div>
-      </div>
-      <div className={metronomeContainer}>
-        <StartStopButton/>
-      </div>
-    </div>
+        <Divider className={divider} />
+        <Grid
+          container
+          className={metronomeBpmSection}
+          size={{ xs: 12, sm: 12, md: 12 }} 
+        >
+          <Grid size={{ xs: 6, sm: 8, md: 10 }}>
+            <BPMControl />
+          </Grid>
+          <Grid size={{ xs: 6, sm: 4, md: 2 }}>
+            <BeatControl />
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid
+        className={metronomeStartButtonContainer}
+        size={{ xs: 12, sm: 4, md: 12 }}
+        justifyContent={"center"}
+      >
+        <StartStopButton />
+      </Grid>
+    </Grid>
   );
 };
 

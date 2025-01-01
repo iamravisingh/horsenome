@@ -1,16 +1,16 @@
 import { css } from "@linaria/core";
 
 const footerContainer = css`
-  width: fit-content;
-  padding: 1rem;
-  text-align: center;
-  font-size: 1rem;
-  color: #6c757d;
-  position: fixed;
-  bottom: 0;
-  text-wrap: balance;
-  border-top: 1px solid #e9ecef;
-  box-sizing: border-box;
+//   width: fit-content;
+//   padding: 1rem;
+//   text-align: center;
+//   font-size: 1rem;
+//   color: #6c757d;
+//   position: fixed;
+//   bottom: 0;
+//   text-wrap: balance;
+//   border-top: 1px solid #e9ecef;
+//   box-sizing: border-box;
   
 `;
 

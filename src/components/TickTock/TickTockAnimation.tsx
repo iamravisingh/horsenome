@@ -22,7 +22,7 @@ const TickTockAnimation = () => {
         <SiriWave
             cover={true}
             width={800}
-            height= {800}
+            height= {400}
             amplitude ={amplitude}
             speed={speed}
             // theme={"ios9"} // Choose style (ios9, classic, or custom)

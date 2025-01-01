@@ -1,32 +1,46 @@
-import { Slider, Typography } from "@mui/material";
+import { Slider, Tooltip, Typography } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 import { css } from "@linaria/core";
 import { motion } from "framer-motion";
 import { useMetronome } from "../../hooks/useMetronome";
 
 const bpmControlContainer = css`
-  width: 100%;
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  align-items: end;
+  // flex-direction: column
+  // align-items: end;
   width: 100%;
 `;
-
-const bpmSlider = css`
-    width: 100% !important;
-`
 
 const bpmDisplayContainer = css`
   font-size: 10px;
 `;
 
-const bpmCount = css`
-  font-size: 10px;
+// const bpmCount = css`
+//   font-size: 10px;
+// `;
+
+const sliderRoot = css`
+  & .MuiSlider-track {
+    height: 4px;
+    borderRadius: 2px;
+    background-color: #3f51b5; /* Example track color */
+  }
+
+  & .MuiSlider-thumb {
+    width: 18px;
+    height: 18px;
+    background-color: #fff; /* Example thumb color */
+    border: 2px solid #3f51b5; /* Example thumb border */
+    "&:before": {
+      boxShadow: "0 2px 10px 0 rgba(34, 36, 38, 0.15)!important",
+    },
+  }
 `;
 
-
 const BPMControl = () => {
-  const { bpm, isRunning, setBpm } = useMetronome();
+  const { bpm, setBpm } = useMetronome();
   const handleOnChange = (e: Event, value: number | number[]) => {
     console.log("e inside handleOnChange >>>>>>>", e);
     const beat = value as number;
@@ -38,36 +52,34 @@ const BPMControl = () => {
   // const decreaseBPM = () => onChange(Math.max(bpm - 5, 40)); // Min BPM 40
 
   return (
-    <div className={bpmControlContainer}>
-      {/* <FloatingActionButtons /> */}
-      <Slider
-        className={bpmSlider}
-        defaultValue={50}
-        // marks
-        // step={10}
-        min={10}
-        max={240}
-        color="success"
-        value={bpm}
-        onChange={handleOnChange}
-        valueLabelDisplay="auto"
-        aria-label="bpm-control"
-        aria-valuetext="current bpm count"
-      />
-      <motion.div
-        className={bpmDisplayContainer}
-        animate={{ scale: isRunning ? 1.2 : 1 }}
-        transition={{ duration: 0.2, type: "spring" }}
-      >
-        {/* <Typography variant="h6">BPM:</Typography> */}
-        <motion.div animate={{ y: [0, -5, 0] }} className={bpmCount}>
-          {/* // add tooltip for user to understand what is count */}
-          <Typography variant="h6" color="success.main">
-            {bpm}
-          </Typography>
-        </motion.div>
-      </motion.div>
-    </div>
+    <Grid container className={bpmControlContainer} columnSpacing={3}>
+      <Grid size={{ xs: 12, sm: 12, md: 11 }}>
+        <Slider
+          defaultValue={50}
+          // marks
+          // step={10}
+          min={10}
+          max={240}
+          color="success"
+          value={bpm}
+          onChange={handleOnChange}
+          valueLabelDisplay="auto"
+          aria-label="bpm-control"
+          aria-valuetext="current bpm count"
+          className={sliderRoot}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 12, md: 1 }}>
+        <Tooltip arrow title="BPM">
+          <motion.div className={bpmDisplayContainer}>
+            {/* // add tooltip for user to understand what is count */}
+            <Typography variant="body1" color="success.main">
+              {bpm}
+            </Typography>
+          </motion.div>
+        </Tooltip>
+      </Grid>
+    </Grid>
   );
 };
 
