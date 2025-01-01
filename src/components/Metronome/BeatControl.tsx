@@ -26,8 +26,8 @@ const BeatControl = () => {
 
   return (
     <Grid container className={beatsContainer} justifyContent={"end"}>
-      <Grid>
-        <FormControl size="medium">
+      <Grid size={{ xs: 12,  sm: 12, md: 12 }}>
+        <FormControl size="medium" fullWidth>
           <InputLabel
             id="bpm-input"
             sx={{ display: "flex", alignItems: "center" }}
@@ -35,6 +35,7 @@ const BeatControl = () => {
             <img src={ClapIcon} style={{ width: 40, height: 40 }} />
           </InputLabel>
           <Select
+            fullWidth
             id="bpm-input"
             size="medium"
             value={beatsPerMeasure}

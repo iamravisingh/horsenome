@@ -5,6 +5,7 @@ import BPMControl from "./BPMControl";
 import BeatControl from "./BeatControl";
 import StartStopButton from "./StartStopButton";
 import TickTockAnimation from "../TickTock";
+// import RhythmSelector from "./RhythmSelector";
 
 const metronomeSection = css`
   box-sizing: border-box;
@@ -62,6 +63,7 @@ const Metronome = () => {
             <BPMControl />
           </Grid>
           <Grid size={{ xs: 6, sm: 4, md: 2 }}>
+            {/* <RhythmSelector/> */}
             <BeatControl />
           </Grid>
         </Grid>
