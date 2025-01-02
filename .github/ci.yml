@@ -18,33 +18,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Set up Node.js and pnpm
+      # Set up Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'pnpm'
 
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      # Install dependencies with frozen lockfile
+      # Install dependencies with frozen lockfile using npx
       - name: Install dependencies (frozen lockfile)
-        run: pnpm install --frozen-lockfile
+        run: npx pnpm install --frozen-lockfile
 
-      # Build the project
+      # Build the project using npx
       - name: Build the project
         run: pnpm build
 
-      # Create a release (if tagged)
+      # Create a release (if tagged) using npx
       - name: Release using GitHub Actions
         if: startsWith(github.ref, 'refs/tags/')
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ github.ref_name }}
-          release_name: ${{ github.ref_name }}
-          draft: false
-          prerelease: false
+        run: |
+          npx actions/create-release@v1 \
+            --tag_name=${{ github.ref_name }} \
+            --release_name=${{ github.ref_name }} \
+            --draft=false \
+            --prerelease=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
