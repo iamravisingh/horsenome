@@ -10,8 +10,10 @@ const siriWaveBackground = css`
 
 const TickTockAnimation = () => {
   const { isRunning, bpm } = useMetronome();
-  const amplitude = isRunning ? 2 : 1.5; // Adjust wave visibility based on running state
-  const speed = isRunning ? 60 / bpm : 0.02; // Dynamically adjust speed based on BPM
+  const amplitude = 1.6; // Adjust wave visibility based on running state
+  const speed = isRunning ? bpm / 60 : 0.01; // Dynamically adjust speed based on BPM
+  // const frequencyOffset = (bpm / 120) * 0.01; // Adjust offset based on BPM
+
 
   const handleCanvasClick = () => {
     // stop the howler player;
@@ -25,6 +27,7 @@ const TickTockAnimation = () => {
             height= {400}
             amplitude ={amplitude}
             speed={speed}
+            // frequency={frequencyOffset}
             // theme={"ios9"} // Choose style (ios9, classic, or custom)
             color={"6adc92"}
             autostart

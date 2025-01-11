@@ -5,6 +5,7 @@ import BPMControl from "./BPMControl";
 import BeatControl from "./BeatControl";
 import StartStopButton from "./StartStopButton";
 import TickTockAnimation from "../TickTock";
+// import PracticeSession from "./PracticeMode";
 // import RhythmSelector from "./RhythmSelector";
 
 const metronomeSection = css`
@@ -75,6 +76,11 @@ const Metronome = () => {
       >
         <StartStopButton />
       </Grid>
+      {/* Practice Session Section */}
+      <Divider className={divider} />
+      {/* <Grid size={{xs: 12, md: 12}}>
+        <PracticeSession />
+      </Grid> */}
     </Grid>
   );
 };

@@ -1,5 +1,4 @@
 import Metronome from "./components/Metronome/Metronome";
-// import { Container, Grid2 } from "@mui/material";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid2";
 import { css } from "@linaria/core";

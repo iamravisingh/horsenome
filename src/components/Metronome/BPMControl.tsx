@@ -25,18 +25,18 @@ const sliderRoot = css`
   & .MuiSlider-track {
     height: 4px;
     borderRadius: 2px;
-    background-color: #3f51b5; /* Example track color */
+    // background-color: #3f51b5; /* Example track color */
   }
 
   & .MuiSlider-thumb {
-    width: 18px;
-    height: 18px;
-    background-color: #fff; /* Example thumb color */
-    border: 2px solid #3f51b5; /* Example thumb border */
-    "&:before": {
-      boxShadow: "0 2px 10px 0 rgba(34, 36, 38, 0.15)!important",
-    },
-  }
+  //   width: 18px;
+  //   height: 18px;
+  //   background-color: #fff; /* Example thumb color */
+  //   border: 2px solid #3f51b5; /* Example thumb border */
+  //   "&:before": {
+  //     boxShadow: "0 2px 10px 0 rgba(34, 36, 38, 0.15)!important",
+  //   },
+  // }
 `;
 
 const BPMControl = () => {

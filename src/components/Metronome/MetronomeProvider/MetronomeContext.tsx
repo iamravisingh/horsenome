@@ -74,7 +74,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current); // Cleanup interval
     };
-  }, [bpm, beatsPerMeasure]);
+  }, [bpm, beatsPerMeasure, isRunning]);
 
   return (
     <MetronomeContext.Provider
