@@ -36,13 +36,22 @@ export const Header = () => {
           title={
             <>
               <Typography variant="body1" gutterBottom>
-                Use the <b>Slider</b> to adjust BPM (Beats Per Minute).
+                <b>BPM Slider:</b> Adjust tempo (10-240 BPM)
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Use the <b>Dropdown</b> to set the beat pattern.
+                <b>Beat Dropdown:</b> Set number of beats per measure
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Click the <b>Start/Stop</b> button to control playback.
+                <b>Rhythm Chip:</b> Choose predefined patterns (2/4, 3/4, 4/4, 6/8, 7/8, etc.) or create custom accent patterns
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                <b>Beat Indicator:</b> Visual display shows current beat and accent pattern
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                <b>Start/Stop Button:</b> Control metronome playback
+              </Typography>
+              <Typography variant="body2" sx={{ mt: 1, fontStyle: 'italic' }}>
+                Blue beats = accented (strong), Gray beats = regular (weak)
               </Typography>
             </>
           }
