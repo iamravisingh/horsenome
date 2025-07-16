@@ -13,6 +13,8 @@ const indicatorContainer = css`
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
 `;
 
 const beatsRow = css`
@@ -21,6 +23,8 @@ const beatsRow = css`
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  max-width: 100%;
+  contain: layout; /* Prevent layout shifts */
 `;
 
 const beatCircle = css`
@@ -35,6 +39,8 @@ const beatCircle = css`
   border: 3px solid;
   position: relative;
   user-select: none;
+  touch-action: none; /* Prevent touch scrolling */
+  will-change: transform; /* Optimize animations */
 `;
 
 const accentBeat = css`
@@ -121,18 +127,25 @@ const BeatIndicator: React.FC = () => {
               animate={
                 isCurrent
                   ? {
-                      scale: [1, 1.2, 1],
+                      scale: [1, 1.15, 1],
                       boxShadow: [
                         "0 0 0px rgba(76, 175, 80, 0.6)",
-                        "0 0 20px rgba(76, 175, 80, 0.8)",
+                        "0 0 15px rgba(76, 175, 80, 0.8)",
                         "0 0 0px rgba(76, 175, 80, 0.6)",
                       ],
                     }
                   : { scale: 1 }
               }
               transition={{
-                duration: 0.3,
+                duration: 0.25,
                 ease: "easeInOut",
+              }}
+              style={{
+                transformOrigin: "center",
+              }}
+              onAnimationStart={(e) => {
+                // Prevent any scroll during animation
+                e.preventDefault?.();
               }}
             >
               {index + 1}

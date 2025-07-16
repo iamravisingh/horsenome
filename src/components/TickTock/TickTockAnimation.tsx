@@ -4,34 +4,46 @@ import { useMetronome } from "../../hooks/useMetronome";
 
 const siriWaveBackground = css`
   width: 100%;
+  height: 100%;
   overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none; /* Prevent touch scrolling interference */
+  user-select: none;
 `;
-
 
 const TickTockAnimation = () => {
   const { isRunning, bpm } = useMetronome();
-  const amplitude = 1.6; // Adjust wave visibility based on running state
-  const speed = isRunning ? bpm / 60 : 0.01; // Dynamically adjust speed based on BPM
-  // const frequencyOffset = (bpm / 120) * 0.01; // Adjust offset based on BPM
+  const amplitude = 1.6;
+  const speed = isRunning ? bpm / 60 : 0.01;
 
-
-  const handleCanvasClick = () => {
-    // stop the howler player;
-  }
+  const handleCanvasClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Prevent any scroll behavior from click
+  };
 
   return (
-    <div className={siriWaveBackground} onClick={handleCanvasClick}>
-        <SiriWave
-            cover={true}
-            width={800}
-            height= {400}
-            amplitude ={amplitude}
-            speed={speed}
-            // frequency={frequencyOffset}
-            // theme={"ios9"} // Choose style (ios9, classic, or custom)
-            color={"6adc92"}
-            autostart
-        />
+    <div 
+      className={siriWaveBackground} 
+      onClick={handleCanvasClick}
+      onTouchStart={(e) => e.preventDefault()}
+    >
+      <SiriWave
+        cover={true}
+        width={800}
+        height={280}
+        amplitude={amplitude}
+        speed={speed}
+        color={"6adc92"}
+        autostart
+        style={{
+          maxWidth: '100%',
+          maxHeight: '100%',
+        }}
+      />
     </div>
   );
 };
