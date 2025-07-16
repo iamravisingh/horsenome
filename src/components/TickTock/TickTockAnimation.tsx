@@ -28,8 +28,8 @@ const TickTockAnimation = () => {
             amplitude ={amplitude}
             speed={speed}
             // frequency={frequencyOffset}
-            // theme={"ios9"} // Choose style (ios9, classic, or custom)
-            color={"6adc92"}
+            theme={"ios9"} // Choose style (ios9, classic, or custom)
+            // color={"6adc92"}
             autostart
         />
     </div>

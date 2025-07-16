@@ -5,12 +5,12 @@ import { css } from "@linaria/core";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { MetronomeProvider } from "./components/Metronome/MetronomeProvider";
+import FloatingStartButton from "./components/Metronome/FloatingStartButton";
 import "./App.css";
 
 const appContainer = css`
-  // display: flex;
-  // flex-direction: column;
-  // height: 100vh; /* Full viewport height */
+  min-height: 100vh;
+  padding-bottom: 60px; /* Space for floating button */
 `;
 
 const headerFooter = css`
@@ -35,14 +35,15 @@ const mainContent = css`
 
 function App() {
   return (
-    <Container>
-      <Grid container className={appContainer} spacing={4}>
+    <Container className={appContainer}>
+      <Grid container spacing={4}>
         <Grid className={headerFooter} size={12}>
           <Header />
         </Grid>
         <Grid className={mainContent} size={12}>
           <MetronomeProvider>
             <Metronome />
+            <FloatingStartButton />
           </MetronomeProvider>
         </Grid>
         <Grid className={headerFooter} size={12}>
