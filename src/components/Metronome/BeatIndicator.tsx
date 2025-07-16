@@ -49,7 +49,7 @@ const regularBeat = css`
   color: #666;
 `;
 
-const currentBeat = css`
+const activeBeatStyle = css`
   border-color: #4caf50 !important;
   background-color: #4caf50 !important;
   color: white !important;
@@ -113,7 +113,7 @@ const BeatIndicator: React.FC = () => {
               key={index}
               className={`${beatCircle} ${
                 isCurrent 
-                  ? currentBeat 
+                  ? activeBeatStyle 
                   : isAccent 
                   ? accentBeat 
                   : regularBeat
