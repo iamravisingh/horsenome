@@ -1,34 +1,9 @@
 #root {
-  /* margin: 0; 
-  padding: 0; */
-  /* margin: 0 auto; */
-  text-align: center;
   width: 100%;
+  min-height: 100vh;
   margin: 0 auto;
-  font-family: monospace;
-  background-color: #eee;
+  font-family: "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.94), rgba(248, 250, 248, 0.98) 44%, #f3f6f1 100%);
+  color: #191c1b;
 }
-
-/* .logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) { */

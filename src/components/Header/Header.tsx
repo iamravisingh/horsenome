@@ -2,7 +2,8 @@ import { useState } from "react";
 import { css } from "@linaria/core";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import ArtTrackIcon from "@mui/icons-material/ArtTrack";
+import TuneIcon from "@mui/icons-material/Tune";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Typography from "@mui/material/Typography";
 
@@ -11,7 +12,14 @@ const headerContainer = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 6px 0 10px;
+`;
+
+const brand = css`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #3b6934;
 `;
 
 export const Header = () => {
@@ -25,24 +33,45 @@ export const Header = () => {
   };
   return (
     <header className={headerContainer}>
-      <span>Horsenome</span>
+      <div className={brand}>
+        <ArtTrackIcon sx={{ fontSize: 17 }} />
+        <Typography
+          component="span"
+          sx={{
+            fontWeight: 700,
+            fontSize: { xs: "1.25rem", sm: "1.4rem" },
+            lineHeight: 1,
+            letterSpacing: "-0.03em",
+          }}
+        >
+          Horsenome
+        </Typography>
+      </div>
       <ClickAwayListener onClickAway={handleTooltipClose}>
         <Tooltip
           open={open}
-          arrow
           disableHoverListener
           disableFocusListener
           disableInteractive
           title={
             <>
-              <Typography variant="body1" gutterBottom>
-                Use the <b>Slider</b> to adjust BPM (Beats Per Minute).
+              <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>
+                Quick help
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Use the <b>Dropdown</b> to set the beat pattern.
+                <b>Tempo slider</b>
+                <br />
+                Set the BPM.
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Click the <b>Start/Stop</b> button to control playback.
+                <b>Beat selector</b>
+                <br />
+                Pick a taal or meter.
+              </Typography>
+              <Typography variant="body1">
+                <b>Start/Stop</b>
+                <br />
+                Begin or pause playback.
               </Typography>
             </>
           }
@@ -54,9 +83,22 @@ export const Header = () => {
           onDoubleClick={() => setOpen(!open)}
           onMouseLeave={handleTooltipClose}
         >
-          <IconButton>
-            <HelpOutlineIcon />
-          </IconButton>
+          <Tooltip title="Quick help" arrow>
+            <IconButton
+              aria-label="quick help"
+              sx={{
+                width: 32,
+                height: 32,
+                backgroundColor: "rgba(230, 233, 231, 0.85)",
+                color: "#556158",
+                "&:hover": {
+                  backgroundColor: "rgba(230, 233, 231, 1)",
+                },
+              }}
+            >
+              <TuneIcon sx={{ fontSize: 16 }} />
+            </IconButton>
+          </Tooltip>
         </Tooltip>
       </ClickAwayListener>
     </header>

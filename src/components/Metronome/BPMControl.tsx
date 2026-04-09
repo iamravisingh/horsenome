@@ -1,85 +1,53 @@
-import { Slider, Tooltip, Typography } from "@mui/material";
-import Grid from "@mui/material/Grid2";
+import { Slider } from "@mui/material";
 import { css } from "@linaria/core";
-import { motion } from "framer-motion";
 import { useMetronome } from "../../hooks/useMetronome";
 
 const bpmControlContainer = css`
   display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  // flex-direction: column
-  // align-items: end;
+  flex-direction: column;
   width: 100%;
+  padding: 0 clamp(8px, 2vw, 24px);
 `;
-
-const bpmDisplayContainer = css`
-  font-size: 10px;
-`;
-
-// const bpmCount = css`
-//   font-size: 10px;
-// `;
 
 const sliderRoot = css`
+  color: #3f6f35;
+
   & .MuiSlider-track {
-    height: 4px;
-    borderRadius: 2px;
-    // background-color: #3f51b5; /* Example track color */
+    height: 6px;
+    border-radius: 999px;
+  }
+
+  & .MuiSlider-rail {
+    height: 6px;
+    border-radius: 999px;
+    background: #e1e3e1;
+    opacity: 1;
   }
 
   & .MuiSlider-thumb {
-  //   width: 18px;
-  //   height: 18px;
-  //   background-color: #fff; /* Example thumb color */
-  //   border: 2px solid #3f51b5; /* Example thumb border */
-  //   "&:before": {
-  //     boxShadow: "0 2px 10px 0 rgba(34, 36, 38, 0.15)!important",
-  //   },
-  // }
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border: 2px solid #5f8957;
+    box-shadow: 0 4px 16px rgba(25, 28, 27, 0.08);
+  }
 `;
 
 const BPMControl = () => {
   const { bpm, setBpm } = useMetronome();
-  const handleOnChange = (e: Event, value: number | number[]) => {
-    console.log("e inside handleOnChange >>>>>>>", e);
-    const beat = value as number;
-    setBpm(beat);
-    // setBeatsPerMeasure(beat);
-  };
-
-  // const increaseBPM = () => onChange(Math.min(bpm + 5, 240)); // Max BPM 240
-  // const decreaseBPM = () => onChange(Math.max(bpm - 5, 40)); // Min BPM 40
 
   return (
-    <Grid container className={bpmControlContainer} columnSpacing={3}>
-      <Grid size={{ xs: 12, sm: 12, md: 11 }}>
-        <Slider
-          defaultValue={50}
-          // marks
-          // step={10}
-          min={10}
-          max={240}
-          color="success"
-          value={bpm}
-          onChange={handleOnChange}
-          valueLabelDisplay="auto"
-          aria-label="bpm-control"
-          aria-valuetext="current bpm count"
-          className={sliderRoot}
-        />
-      </Grid>
-      <Grid size={{ xs: 12, sm: 12, md: 1 }}>
-        <Tooltip arrow title="BPM">
-          <motion.div className={bpmDisplayContainer}>
-            {/* // add tooltip for user to understand what is count */}
-            <Typography variant="body1" color="success.main">
-              {bpm}
-            </Typography>
-          </motion.div>
-        </Tooltip>
-      </Grid>
-    </Grid>
+    <div className={bpmControlContainer}>
+      <Slider
+        min={40}
+        max={220}
+        value={bpm}
+        onChange={(_, value) => setBpm(value as number)}
+        valueLabelDisplay="off"
+        aria-label="tempo"
+        className={sliderRoot}
+      />
+    </div>
   );
 };
 

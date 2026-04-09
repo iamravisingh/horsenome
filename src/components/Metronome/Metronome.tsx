@@ -1,87 +1,171 @@
 import { css } from "@linaria/core";
-import Grid from "@mui/material/Grid2";
-import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
+import VolumeUpOutlinedIcon from "@mui/icons-material/VolumeUpOutlined";
+import VibrationOutlinedIcon from "@mui/icons-material/VibrationOutlined";
+import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
 import BPMControl from "./BPMControl";
 import BeatControl from "./BeatControl";
 import StartStopButton from "./StartStopButton";
 import TickTockAnimation from "../TickTock";
-// import PracticeSession from "./PracticeMode";
-// import RhythmSelector from "./RhythmSelector";
+import { useMetronome } from "../../hooks/useMetronome";
 
 const metronomeSection = css`
-  box-sizing: border-box;
-  background: linear-gradient(to bottom, #f9f9f9, #eaeaea);
-  border-radius: 10px;
-  padding: 20px;
+  width: min(100%, 760px);
+  margin: 0 auto;
+  height: 100%;
+  max-height: calc(100vh - 88px);
+  padding: clamp(16px, 2.4vw, 24px) 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+  position: relative;
+  overflow: hidden;
 `;
 
-const metronomeStartButtonContainer = css`
-  display: flex;
-  width: 100%;
-  align-items: flex-end;
-  justify-content: end;
+const ambientWave = css`
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: min(120vw, 980px);
+  height: min(120vw, 980px);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0.32;
+  filter: blur(6px);
 `;
 
-const metronomeBpmSection = css`
-  width: 100%;
+const readout = css`
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+`;
+
+const transport = css`
+  display: flex;
+  justify-content: center;
+  margin-top: -4px;
+  position: relative;
+  z-index: 1;
+`;
+
+const controlsGrid = css`
+  width: 100%;
   gap: 20px;
-  align-items: end;
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 560px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
 `;
 
-const metronomeAnimateContainer = css`
+const visualizerWrap = css`
   width: 100%;
-  gap: 10px;
+  max-width: 360px;
+  padding-top: 2px;
+  position: relative;
+  z-index: 1;
 `;
 
-const divider = css`
-  margin: 20px 0;
-  background-color: #d3d3d3; /* Light gray for contrast */
-  height: 2px;
+const actionRow = css`
+  display: flex;
+  justify-content: center;
+  gap: clamp(28px, 5vw, 54px);
+  padding-top: 2px;
+  color: rgba(45, 90, 39, 0.24);
+  position: relative;
+  z-index: 1;
+`;
+
+const actionItem = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 64px;
+`;
+
+const actionLabel = css`
+  font-size: 0.56rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(113, 121, 115, 0.64);
+`;
+
+const bpmCaption = css`
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #7b827b;
+  font-weight: 700;
+  line-height: 1;
 `;
 
 const Metronome = () => {
+  const { bpm } = useMetronome();
+
   return (
-    <Grid
-      container
-      className={metronomeSection}
-      spacing={{ xs: 2, md: 3 }}
-      columns={{ xs: 4, sm: 8, md: 12 }}
-    >
-      <Grid
-        container
-        className={metronomeAnimateContainer}
-        size={{ xs: 12, sm: 8, md: 12 }}
-      >
-        <TickTockAnimation />
-        <Divider className={divider} />
-        <Grid
-          container
-          className={metronomeBpmSection}
-          size={{ xs: 12, sm: 12, md: 12 }} 
+    <div className={metronomeSection}>
+      <div className={ambientWave} aria-hidden="true">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <path
+            fill="rgba(165, 216, 152, 0.22)"
+            transform="translate(100 100)"
+            d="M44.7,-76.4C58.1,-69.2,69.5,-57.4,77.3,-43.8C85.1,-30.2,89.3,-15.1,89.7,0.2C90.1,15.5,86.6,31,78.8,44.6C71.1,58.1,59,69.7,45.3,77.4C31.5,85.1,15.8,88.9,0.2,88.6C-15.4,88.3,-30.7,83.9,-44.6,76.2C-58.4,68.4,-70.7,57.3,-78.9,43.8C-87.1,30.3,-91.1,14.5,-90.4,-1.2C-89.8,-16.9,-84.5,-32.5,-75.6,-45.8C-66.6,-59.1,-54.1,-70.1,-39.9,-76.8C-25.7,-83.4,-9.8,-85.7,3.5,-91.7C16.8,-97.7,31.3,-83.5,44.7,-76.4Z"
+          />
+        </svg>
+      </div>
+
+      <div className={readout}>
+        <Typography
+          component="div"
+          sx={{
+            fontSize: { xs: "6rem", sm: "7.25rem", md: "8.75rem" },
+            lineHeight: 0.88,
+            fontWeight: 800,
+            letterSpacing: "-0.06em",
+            color: "#191c1b",
+            fontVariantNumeric: "lining-nums",
+            userSelect: "none",
+          }}
         >
-          <Grid size={{ xs: 6, sm: 8, md: 10 }}>
-            <BPMControl />
-          </Grid>
-          <Grid size={{ xs: 6, sm: 4, md: 2 }}>
-            {/* <RhythmSelector/> */}
-            <BeatControl />
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid
-        className={metronomeStartButtonContainer}
-        size={{ xs: 12, sm: 4, md: 12 }}
-        justifyContent={"center"}
-      >
+          {bpm}
+        </Typography>
+        <Typography className={bpmCaption}>Beats Per Minute</Typography>
+      </div>
+
+      <div className={transport}>
         <StartStopButton />
-      </Grid>
-      {/* Practice Session Section */}
-      <Divider className={divider} />
-      {/* <Grid size={{xs: 12, md: 12}}>
-        <PracticeSession />
-      </Grid> */}
-    </Grid>
+      </div>
+
+      <div className={controlsGrid}>
+        <BPMControl />
+        <BeatControl />
+      </div>
+
+      <div className={actionRow}>
+        <div className={actionItem}>
+          <VolumeUpOutlinedIcon sx={{ fontSize: 20 }} />
+          <Typography className={actionLabel}>Volume</Typography>
+        </div>
+        <div className={actionItem} style={{ color: "#9db89e" }}>
+          <VibrationOutlinedIcon sx={{ fontSize: 20 }} />
+          <Typography className={actionLabel}>Haptic</Typography>
+        </div>
+        <div className={actionItem}>
+          <TimerOutlinedIcon sx={{ fontSize: 20 }} />
+          <Typography className={actionLabel}>Timer</Typography>
+        </div>
+      </div>
+
+      <div className={visualizerWrap}>
+        <TickTockAnimation />
+      </div>
+    </div>
   );
 };
 
