@@ -1,3 +1,4 @@
+import { HTMLAttributes } from "react";
 import { css } from "@linaria/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
@@ -45,6 +46,14 @@ const MobileBeatControl = ({
           onChange={(event: SelectChangeEvent<string>) => onPresetSelect(event.target.value)}
           IconComponent={ExpandMoreIcon}
           aria-label="meter"
+          data-testid="mobile-meter-select"
+          SelectDisplayProps={
+            { "data-testid": "mobile-meter-select-display" } as HTMLAttributes<HTMLDivElement>
+          }
+          MenuProps={{
+            MenuListProps:
+              { "data-testid": "mobile-meter-options" } as HTMLAttributes<HTMLUListElement>,
+          }}
           sx={{
             borderRadius: "999px",
             backgroundColor: "rgba(165, 216, 152, 0.18)",
@@ -62,15 +71,19 @@ const MobileBeatControl = ({
           }}
         >
           {DEFAULT_METER_PRESETS.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
+            <MenuItem
+              key={option.value}
+              value={option.value}
+              data-testid={`mobile-meter-option-${option.value}`}
+            >
               {option.label}
             </MenuItem>
           ))}
-          <MenuItem value="custom">Custom</MenuItem>
+          <MenuItem value="custom" data-testid="mobile-meter-option-custom">Custom</MenuItem>
         </Select>
       </FormControl>
       {selectedWesternNotation ? (
-        <Typography className={mobileCaption}>
+        <Typography className={mobileCaption} data-testid="mobile-meter-caption">
           {selectedWesternNotation}
         </Typography>
       ) : null}

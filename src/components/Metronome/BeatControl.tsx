@@ -157,6 +157,7 @@ const BeatControl = () => {
               <div className={customInputs}>
                 <input
                   className={numberInput}
+                  data-testid="custom-meter-beats"
                   type="number"
                   min={CUSTOM_METER_LIMITS.min}
                   max={CUSTOM_METER_LIMITS.max}
@@ -168,6 +169,7 @@ const BeatControl = () => {
                 <span className={slash}>/</span>
                 <input
                   className={numberInput}
+                  data-testid="custom-meter-unit"
                   type="number"
                   min={CUSTOM_METER_LIMITS.min}
                   max={CUSTOM_METER_LIMITS.max}
@@ -177,7 +179,7 @@ const BeatControl = () => {
                   onBlur={() => applyCustomMeter(customBeats, customUnit)}
                 />
               </div>
-              <span className={customLabel}>Custom</span>
+              <span className={customLabel} data-testid="custom-meter-label">Custom</span>
             </div>
           </motion.div>
         ) : null}

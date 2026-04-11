@@ -1,3 +1,4 @@
+import { HTMLAttributes } from "react";
 import { Slider } from "@mui/material";
 import { css } from "@linaria/core";
 import { useMetronome } from "../../hooks/useMetronome";
@@ -46,6 +47,13 @@ const BPMControl = () => {
         valueLabelDisplay="off"
         aria-label="tempo"
         className={sliderRoot}
+        data-testid="bpm-slider"
+        slotProps={{
+          thumb:
+            { "data-testid": "bpm-slider-thumb" } as HTMLAttributes<HTMLSpanElement>,
+          input:
+            { "data-testid": "bpm-slider-input" } as HTMLAttributes<HTMLInputElement>,
+        }}
       />
     </div>
   );

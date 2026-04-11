@@ -23,12 +23,21 @@ const DesktopBeatControl = ({
   onToggleCustom,
 }: DesktopBeatControlProps) => {
   return (
-    <Stack direction="row" spacing={1.5} useFlexGap className={chipRow} aria-label="meter">
+    <Stack
+      direction="row"
+      spacing={1.5}
+      useFlexGap
+      className={chipRow}
+      aria-label="meter"
+      data-testid="desktop-meter-control"
+    >
       {DEFAULT_METER_PRESETS.map((option) => (
         <Chip
           key={option.value}
           clickable
           onClick={() => onPresetSelect(option.value)}
+          data-testid={`meter-chip-${option.value}`}
+          data-selected={selectedValue === option.value ? "true" : "false"}
           color={selectedValue === option.value ? "primary" : "default"}
           variant={selectedValue === option.value ? "filled" : "outlined"}
           label={
@@ -73,6 +82,8 @@ const DesktopBeatControl = ({
         clickable
         aria-label="custom meter"
         onClick={onToggleCustom}
+        data-testid="custom-meter-toggle"
+        data-selected={showCustom ? "true" : "false"}
         color={showCustom ? "primary" : "default"}
         variant={showCustom ? "filled" : "outlined"}
         icon={
