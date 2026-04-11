@@ -8,21 +8,36 @@ import {
 } from "react";
 import { Howl, Howler } from "howler";
 import { metronomeContext, HistoryEntry, TimeSignature } from "./MetronomeContext";
+import {
+  DEFAULT_METER_PRESET,
+  DEFAULT_RHYTHM_MODE,
+  getRhythmLabel,
+  getRhythmPattern,
+  getSubdivisionCount,
+  RhythmMode,
+} from "../constant";
 
 export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [bpm, setBpmState] = useState(120);
-  const [timeSignature, setTimeSignatureState] = useState<TimeSignature>({ beats: 4, unit: 4 });
+  const [timeSignature, setTimeSignatureState] = useState<TimeSignature>({
+    beats: DEFAULT_METER_PRESET.beats,
+    unit: DEFAULT_METER_PRESET.unit,
+  });
   const [isRunning, setIsRunning] = useState(false);
+  const [rhythmMode, setRhythmModeState] = useState<RhythmMode>(DEFAULT_RHYTHM_MODE);
   const [history, setHistory] = useState<HistoryEntry[]>([
     {
       id: "initial",
       label: "Ready",
-      detail: "120 BPM · 4/4",
+      detail: `120 BPM · ${DEFAULT_METER_PRESET.label}`,
       tone: "neutral",
     },
   ]);
-  const intervalRef = useRef<number | null>(null);
-  const countRef = useRef(0);
+  const timeoutRef = useRef<number | null>(null);
+  const beatCountRef = useRef(0);
+  const subdivisionStepRef = useRef(0);
+  const rhythmPattern = getRhythmPattern(rhythmMode);
+  const subdivisionCount = getSubdivisionCount(rhythmMode);
 
   const tickSound = useRef(
     new Howl({ src: ["/sounds/tick.mp3"], preload: true, html5: true })
@@ -30,57 +45,105 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
   const tockSound = useRef(
     new Howl({ src: ["/sounds/tock.mp3"], preload: true, html5: true })
   ).current;
+  const subdivisionSound = useRef(
+    new Howl({ src: ["/sounds/tock.mp3"], preload: true, html5: true, volume: 0.32 })
+  ).current;
 
   const pushHistory = useCallback((entry: Omit<HistoryEntry, "id">) => {
     const timestamp = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     setHistory((current) => [{ id: timestamp, ...entry }, ...current].slice(0, 6));
   }, []);
 
-  const playSound = useCallback(() => {
-    if (countRef.current % timeSignature.beats === 0) {
-      tickSound.play();
+  const getPlaybackDetail = useCallback(
+    (beats: number, unit: number, bpmValue: number, mode: RhythmMode) => {
+      const rhythmLabel = getRhythmLabel(mode);
+      return `${bpmValue} BPM · ${beats}/${unit}${mode !== "off" ? ` · ${rhythmLabel}` : ""}`;
+    },
+    []
+  );
+
+  const playPulse = useCallback(() => {
+    if (subdivisionStepRef.current === 0) {
+      if (beatCountRef.current % timeSignature.beats === 0) {
+        tickSound.play();
+      } else {
+        tockSound.play();
+      }
+
+      beatCountRef.current = (beatCountRef.current + 1) % timeSignature.beats;
     } else {
-      tockSound.play();
+      subdivisionSound.play();
     }
-    countRef.current = (countRef.current + 1) % timeSignature.beats;
-  }, [timeSignature.beats, tickSound, tockSound]);
 
-  const startInterval = useCallback(() => {
-    if (intervalRef.current) clearInterval(intervalRef.current);
+    subdivisionStepRef.current = (subdivisionStepRef.current + 1) % subdivisionCount;
+  }, [subdivisionCount, subdivisionSound, tickSound, timeSignature.beats, tockSound]);
 
-    intervalRef.current = window.setInterval(() => {
-      playSound();
-    }, (60 / bpm) * 1000);
-  }, [bpm, playSound]);
+  const clearPlaybackTimer = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  }, []);
+
+  const scheduleNextPulse = useCallback(() => {
+    clearPlaybackTimer();
+
+    const beatDurationMs = (60 / bpm) * 1000;
+    const nextStep = subdivisionStepRef.current;
+    const patternDuration = rhythmPattern[nextStep] ?? 1;
+
+    timeoutRef.current = window.setTimeout(() => {
+      playPulse();
+      if (isRunning) {
+        scheduleNextPulse();
+      }
+    }, beatDurationMs * patternDuration);
+  }, [bpm, clearPlaybackTimer, isRunning, playPulse, rhythmPattern]);
 
   const startMetronome = useCallback(() => {
     if (isRunning) return;
 
     setIsRunning(true);
-    countRef.current = 0;
-    playSound();
-    startInterval();
+    beatCountRef.current = 0;
+    subdivisionStepRef.current = 0;
+    playPulse();
+    scheduleNextPulse();
     pushHistory({
       label: "Started",
-      detail: `${bpm} BPM · ${timeSignature.beats}/${timeSignature.unit}`,
+      detail: getPlaybackDetail(timeSignature.beats, timeSignature.unit, bpm, rhythmMode),
       tone: "success",
     });
-  }, [bpm, isRunning, playSound, pushHistory, startInterval, timeSignature.beats, timeSignature.unit]);
+  }, [
+    bpm,
+    getPlaybackDetail,
+    isRunning,
+    playPulse,
+    pushHistory,
+    rhythmMode,
+    scheduleNextPulse,
+    timeSignature.beats,
+    timeSignature.unit,
+  ]);
 
   const stopMetronome = useCallback(() => {
     setIsRunning(false);
     Howler.stop();
+    clearPlaybackTimer();
 
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
     pushHistory({
       label: "Stopped",
-      detail: `${bpm} BPM · ${timeSignature.beats}/${timeSignature.unit}`,
+      detail: getPlaybackDetail(timeSignature.beats, timeSignature.unit, bpm, rhythmMode),
       tone: "neutral",
     });
-  }, [bpm, pushHistory, timeSignature.beats, timeSignature.unit]);
+  }, [
+    bpm,
+    clearPlaybackTimer,
+    getPlaybackDetail,
+    pushHistory,
+    rhythmMode,
+    timeSignature.beats,
+    timeSignature.unit,
+  ]);
 
   const setBpm = useCallback(
     (nextBpm: number) => {
@@ -97,7 +160,9 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
   const setTimeSignature = useCallback(
     (signature: TimeSignature) => {
       setTimeSignatureState(signature);
-      countRef.current = 0;
+      beatCountRef.current = 0;
+      subdivisionStepRef.current = 0;
+
       pushHistory({
         label: "Meter updated",
         detail: `${signature.beats}/${signature.unit}`,
@@ -107,15 +172,30 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
     [pushHistory]
   );
 
+  const setRhythmMode = useCallback(
+    (mode: RhythmMode) => {
+      setRhythmModeState(mode);
+      beatCountRef.current = 0;
+      subdivisionStepRef.current = 0;
+
+      pushHistory({
+        label: "Rhythm updated",
+        detail: getRhythmLabel(mode),
+        tone: "accent",
+      });
+    },
+    [pushHistory]
+  );
+
   useEffect(() => {
     if (isRunning) {
-      startInterval();
+      scheduleNextPulse();
     }
 
     return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
+      clearPlaybackTimer();
     };
-  }, [isRunning, startInterval]);
+  }, [clearPlaybackTimer, isRunning, scheduleNextPulse]);
 
   return (
     <metronomeContext.Provider
@@ -123,6 +203,9 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
         bpm,
         setBpm,
         isRunning,
+        rhythmMode,
+        setRhythmMode,
+        subdivisionCount,
         startMetronome,
         stopMetronome,
         timeSignature,

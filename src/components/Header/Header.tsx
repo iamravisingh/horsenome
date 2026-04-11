@@ -2,8 +2,7 @@ import { useState } from "react";
 import { css } from "@linaria/core";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
-import ArtTrackIcon from "@mui/icons-material/ArtTrack";
-import TuneIcon from "@mui/icons-material/Tune";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Typography from "@mui/material/Typography";
 
@@ -18,7 +17,6 @@ const headerContainer = css`
 const brand = css`
   display: flex;
   align-items: center;
-  gap: 6px;
   color: #3b6934;
 `;
 
@@ -34,12 +32,11 @@ export const Header = () => {
   return (
     <header className={headerContainer}>
       <div className={brand}>
-        <ArtTrackIcon sx={{ fontSize: 17 }} />
         <Typography
           component="span"
           sx={{
             fontWeight: 700,
-            fontSize: { xs: "1.25rem", sm: "1.4rem" },
+            fontSize: { xs: "1.45rem", sm: "1.4rem" },
             lineHeight: 1,
             letterSpacing: "-0.03em",
           }}
@@ -82,23 +79,25 @@ export const Header = () => {
           }}
           onDoubleClick={() => setOpen(!open)}
           onMouseLeave={handleTooltipClose}
+          slotProps={{
+            popper: {
+              disablePortal: true,
+            },
+          }}
         >
-          <Tooltip title="Quick help" arrow>
-            <IconButton
-              aria-label="quick help"
-              sx={{
-                width: 32,
-                height: 32,
-                backgroundColor: "rgba(230, 233, 231, 0.85)",
-                color: "#556158",
-                "&:hover": {
-                  backgroundColor: "rgba(230, 233, 231, 1)",
-                },
-              }}
-            >
-              <TuneIcon sx={{ fontSize: 16 }} />
-            </IconButton>
-          </Tooltip>
+          <IconButton
+            aria-label="quick help"
+            sx={{
+              width: 32,
+              height: 32,
+              color: "#3b6934",
+              "&:hover": {
+                backgroundColor: "rgba(59, 105, 52, 0.08)",
+              },
+            }}
+          >
+            <HelpOutlineIcon sx={{ fontSize: 20 }} />
+          </IconButton>
         </Tooltip>
       </ClickAwayListener>
     </header>

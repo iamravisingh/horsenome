@@ -14,6 +14,14 @@ export type MeterPreset = {
   tradition: "hindustani" | "western";
 };
 
+export type RhythmMode = "off" | "duple" | "triplet" | "quad" | "swing";
+
+export type RhythmOption = {
+  value: RhythmMode;
+  label: string;
+  caption: string;
+};
+
 export const CUSTOM_METER_LIMITS = {
   min: 1,
   max: 32,
@@ -24,10 +32,10 @@ export const PROTOTYPE_TERTIARY_TEXT = "#556158";
 
 export const DEFAULT_METER_PRESETS: MeterPreset[] = [
   {
-    label: "Tintal",
+    label: "Teental",
     notation: "16 matras",
     westernNotation: "16/4",
-    value: "tintal",
+    value: "teental",
     beats: 16,
     unit: 4,
     tradition: "hindustani",
@@ -78,6 +86,62 @@ export const DEFAULT_METER_PRESETS: MeterPreset[] = [
     tradition: "hindustani",
   },
 ];
+
+export const DEFAULT_METER_PRESET = DEFAULT_METER_PRESETS[0];
+
+export const RHYTHM_OPTIONS: RhythmOption[] = [
+  {
+    value: "off",
+    label: "Off",
+    caption: "Main beats only",
+  },
+  {
+    value: "duple",
+    label: "Duple",
+    caption: "2 pulses per beat",
+  },
+  {
+    value: "triplet",
+    label: "Triplet",
+    caption: "3 pulses per beat",
+  },
+  {
+    value: "quad",
+    label: "Quad",
+    caption: "4 pulses per beat",
+  },
+  {
+    value: "swing",
+    label: "Swing",
+    caption: "Long-short feel",
+  },
+];
+
+export const DEFAULT_RHYTHM_MODE: RhythmMode = "off";
+
+export const getRhythmPattern = (mode: RhythmMode) => {
+  switch (mode) {
+    case "duple":
+      return [0.5, 0.5];
+    case "triplet":
+      return [1 / 3, 1 / 3, 1 / 3];
+    case "quad":
+      return [0.25, 0.25, 0.25, 0.25];
+    case "swing":
+      return [2 / 3, 1 / 3];
+    case "off":
+    default:
+      return [1];
+  }
+};
+
+export const getSubdivisionCount = (mode: RhythmMode) => {
+  return getRhythmPattern(mode).length;
+};
+
+export const getRhythmLabel = (mode: RhythmMode) => {
+  return RHYTHM_OPTIONS.find((option) => option.value === mode)?.label ?? "Off";
+};
 
 export const TEMPO_LABELS: TempoLabel[] = [
   { label: "Larghissimo", min: 1, max: 24 },

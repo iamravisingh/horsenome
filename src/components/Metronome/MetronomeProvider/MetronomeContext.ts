@@ -1,4 +1,5 @@
 import { createContext } from "react";
+import { RhythmMode } from "../constant";
 
 export type HistoryEntry = {
   id: string;
@@ -16,6 +17,9 @@ export interface IMetronomeContext {
   bpm: number;
   setBpm: (bpm: number) => void;
   isRunning: boolean;
+  rhythmMode: RhythmMode;
+  setRhythmMode: (mode: RhythmMode) => void;
+  subdivisionCount: number;
   startMetronome: () => void;
   stopMetronome: () => void;
   timeSignature: TimeSignature;

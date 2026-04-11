@@ -5,6 +5,7 @@ import VibrationOutlinedIcon from "@mui/icons-material/VibrationOutlined";
 import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
 import BPMControl from "./BPMControl";
 import BeatControl from "./BeatControl";
+import RhythmControl from "./RhythmControl";
 import StartStopButton from "./StartStopButton";
 import TickTockAnimation from "../TickTock";
 import { useMetronome } from "../../hooks/useMetronome";
@@ -22,6 +23,16 @@ const metronomeSection = css`
   gap: 22px;
   position: relative;
   overflow: hidden;
+
+  @media (min-width: 601px) {
+    height: auto;
+    max-height: none;
+    min-height: calc(100vh - 108px);
+    justify-content: flex-start;
+    padding-top: 20px;
+    padding-bottom: 24px;
+    overflow: visible;
+  }
 `;
 
 const ambientWave = css`
@@ -165,6 +176,8 @@ const Metronome = () => {
       <div className={visualizerWrap}>
         <TickTockAnimation />
       </div>
+
+      <RhythmControl />
     </div>
   );
 };

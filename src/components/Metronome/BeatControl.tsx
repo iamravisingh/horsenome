@@ -1,14 +1,17 @@
 import { css } from "@linaria/core";
-import AddIcon from "@mui/icons-material/Add";
-import { Box, Chip, Stack, Typography } from "@mui/material";
+import {
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { useMetronome } from "../../hooks/useMetronome";
 import {
   CUSTOM_METER_LIMITS,
   DEFAULT_METER_PRESETS,
-  PROTOTYPE_TERTIARY_TEXT,
 } from "./constant";
+import MobileBeatControl from "./MobileBeatControl";
+import DesktopBeatControl from "./DesktopBeatControl";
 
 const beatControl = css`
   width: 100%;
@@ -17,11 +20,6 @@ const beatControl = css`
   justify-content: center;
   align-items: center;
   gap: 14px;
-`;
-
-const chipRow = css`
-  justify-content: center;
-  flex-wrap: wrap;
 `;
 
 const customMeter = css`
@@ -74,6 +72,8 @@ const customLabel = css`
 
 const BeatControl = () => {
   const { timeSignature, setTimeSignature } = useMetronome();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [showCustom, setShowCustom] = useState(false);
   const [customBeats, setCustomBeats] = useState(String(timeSignature.beats));
   const [customUnit, setCustomUnit] = useState(String(timeSignature.unit));
@@ -107,93 +107,42 @@ const BeatControl = () => {
     setShowCustom((current) => !current);
   };
 
+  const selectedPreset = DEFAULT_METER_PRESETS.find(
+    (option) =>
+      option.beats === timeSignature.beats && option.unit === timeSignature.unit
+  );
+
+  const handlePresetSelect = (value: string) => {
+    if (value === "custom") {
+      setShowCustom(true);
+      return;
+    }
+
+    const preset = DEFAULT_METER_PRESETS.find((option) => option.value === value);
+    if (!preset) {
+      return;
+    }
+
+    setShowCustom(false);
+    setTimeSignature({ beats: preset.beats, unit: preset.unit });
+  };
+
   return (
     <div className={beatControl}>
-      <Stack direction="row" spacing={1.5} useFlexGap className={chipRow} aria-label="meter">
-        {DEFAULT_METER_PRESETS.map((option) => (
-          <Chip
-            key={option.value}
-            clickable
-            onClick={() => {
-              setShowCustom(false);
-              setTimeSignature({ beats: option.beats, unit: option.unit });
-            }}
-            color={selectedValue === option.value ? "primary" : "default"}
-            variant={selectedValue === option.value ? "filled" : "outlined"}
-            label={
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  lineHeight: 1.15,
-                }}
-              >
-                <Typography component="span" sx={{ fontSize: "0.9rem", fontWeight: 600 }}>
-                  {option.label}
-                </Typography>
-                <Typography
-                  component="span"
-                  sx={{
-                    fontSize: "0.64rem",
-                    fontWeight: 600,
-                    color: selectedValue === option.value
-                      ? "rgba(255,255,255,0.82)"
-                      : PROTOTYPE_TERTIARY_TEXT,
-                  }}
-                >
-                  {option.westernNotation}
-                </Typography>
-              </Box>
-            }
-            title={`${option.label} · ${option.notation}`}
-            sx={{
-              height: 50,
-              minWidth: 104,
-              borderRadius: "999px",
-              "& .MuiChip-label": {
-                px: 2,
-                py: 0.5,
-              },
-            }}
-          />
-        ))}
-        <Chip
-          clickable
-          aria-label="custom meter"
-          onClick={toggleCustom}
-          color={showCustom ? "primary" : "default"}
-          variant={showCustom ? "filled" : "outlined"}
-          icon={
-            <motion.span
-              animate={{ rotate: showCustom ? 45 : 0, scale: showCustom ? 1.05 : 1 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              style={{ display: "inline-flex" }}
-            >
-              <AddIcon sx={{ fontSize: 18, color: "inherit !important" }} />
-            </motion.span>
-          }
-          label=""
-          sx={{
-            width: 50,
-            height: 50,
-            minWidth: 50,
-            borderRadius: "999px",
-            "& .MuiChip-label": {
-              display: "none",
-              p: 0,
-            },
-            "& .MuiChip-icon": {
-              m: 0,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "100%",
-              height: "100%",
-            },
-          }}
+      {isMobile ? (
+        <MobileBeatControl
+          selectedValue={selectedValue}
+          selectedWesternNotation={selectedPreset?.westernNotation}
+          onPresetSelect={handlePresetSelect}
         />
-      </Stack>
+      ) : (
+        <DesktopBeatControl
+          selectedValue={selectedValue}
+          showCustom={showCustom}
+          onPresetSelect={handlePresetSelect}
+          onToggleCustom={toggleCustom}
+        />
+      )}
 
       <AnimatePresence initial={false}>
         {showCustom ? (

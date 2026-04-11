@@ -18,6 +18,12 @@ const mainContent = css`
   display: flex;
   align-items: center;
   overflow: hidden;
+
+  @media (min-width: 601px) {
+    align-items: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 `;
 
 function App() {
