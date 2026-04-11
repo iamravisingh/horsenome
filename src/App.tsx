@@ -29,7 +29,7 @@ const mainContent = css`
 function App() {
   return (
     <Container maxWidth={false} disableGutters sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
-      <div className={appContainer}>
+      <div className={appContainer} data-testid="app-shell">
         <Header />
         <div className={mainContent}>
           <MetronomeProvider>

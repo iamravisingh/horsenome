@@ -40,6 +40,7 @@ const StartStopButton = () => {
       className={playButtonStyle}
       size="large"
       aria-label={isRunning ? "stop metronome" : "start metronome"}
+      data-testid="transport-toggle"
       sx={{
         border: "1px solid rgba(31, 42, 29, 0.08)",
       }}

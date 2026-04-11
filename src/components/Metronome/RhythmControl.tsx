@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { HTMLAttributes, useMemo, useState } from "react";
 import { css } from "@linaria/core";
 import EqualizerRoundedIcon from "@mui/icons-material/EqualizerRounded";
 import HorizontalRuleRoundedIcon from "@mui/icons-material/HorizontalRuleRounded";
@@ -104,6 +104,7 @@ const RhythmControl = () => {
         <IconButton
           aria-label="rhythm settings"
           onClick={handleOpen}
+          data-testid="rhythm-trigger"
           sx={{
             width: 56,
             height: 56,
@@ -126,6 +127,9 @@ const RhythmControl = () => {
         anchorEl={anchorEl}
         open={!isMobile && Boolean(anchorEl)}
         onClose={handleClose}
+        MenuListProps={
+          { "data-testid": "rhythm-menu" } as HTMLAttributes<HTMLUListElement>
+        }
         anchorOrigin={{ vertical: "top", horizontal: "left" }}
         transformOrigin={{ vertical: "bottom", horizontal: "right" }}
         slotProps={{
@@ -151,6 +155,8 @@ const RhythmControl = () => {
               key={option.value}
               selected={selected}
               onClick={() => handleSelect(option.value)}
+              data-testid={`rhythm-option-${option.value}`}
+              data-selected={selected ? "true" : "false"}
               sx={{
                 borderRadius: "14px",
                 mb: 0.5,
@@ -188,6 +194,7 @@ const RhythmControl = () => {
         open={drawerOpen}
         onClose={handleClose}
         PaperProps={{
+          "data-testid": "rhythm-drawer",
           sx: {
             borderTopLeftRadius: "24px",
             borderTopRightRadius: "24px",
@@ -208,6 +215,8 @@ const RhythmControl = () => {
                 key={option.value}
                 selected={selected}
                 onClick={() => handleSelect(option.value)}
+                data-testid={`rhythm-option-${option.value}`}
+                data-selected={selected ? "true" : "false"}
                 sx={{
                   borderRadius: "16px",
                   mb: 0.75,
@@ -242,6 +251,7 @@ const RhythmControl = () => {
       </Drawer>
 
       <Typography
+        data-testid="rhythm-current-label"
         sx={{
           position: "absolute",
           right: 64,

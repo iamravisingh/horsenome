@@ -120,7 +120,7 @@ const Metronome = () => {
   const { bpm } = useMetronome();
 
   return (
-    <div className={metronomeSection}>
+    <div className={metronomeSection} data-testid="metronome-root">
       <div className={ambientWave} aria-hidden="true">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -134,6 +134,7 @@ const Metronome = () => {
       <div className={readout}>
         <Typography
           component="div"
+          data-testid="bpm-readout"
           sx={{
             fontSize: { xs: "6rem", sm: "7.25rem", md: "8.75rem" },
             lineHeight: 0.88,
@@ -153,7 +154,7 @@ const Metronome = () => {
         <StartStopButton />
       </div>
 
-      <div className={controlsGrid}>
+      <div className={controlsGrid} data-testid="controls-grid">
         <BPMControl />
         <BeatControl />
       </div>

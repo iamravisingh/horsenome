@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { HTMLAttributes, useState } from "react";
 import { css } from "@linaria/core";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
@@ -31,7 +31,7 @@ export const Header = () => {
   };
   return (
     <header className={headerContainer}>
-      <div className={brand}>
+      <div className={brand} data-testid="app-brand">
         <Typography
           component="span"
           sx={{
@@ -83,10 +83,14 @@ export const Header = () => {
             popper: {
               disablePortal: true,
             },
+            tooltip: {
+              ...( { "data-testid": "quick-help-tooltip" } as HTMLAttributes<HTMLDivElement> ),
+            },
           }}
         >
           <IconButton
             aria-label="quick help"
+            data-testid="quick-help-trigger"
             sx={{
               width: 32,
               height: 32,
