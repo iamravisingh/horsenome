@@ -11,7 +11,13 @@ const headerContainer = css`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 6px 0 10px;
+`;
+
+const brand = css`
+  display: flex;
+  align-items: center;
+  color: #3b6934;
 `;
 
 export const Header = () => {
@@ -25,24 +31,44 @@ export const Header = () => {
   };
   return (
     <header className={headerContainer}>
-      <span>Horsenome</span>
+      <div className={brand}>
+        <Typography
+          component="span"
+          sx={{
+            fontWeight: 700,
+            fontSize: { xs: "1.45rem", sm: "1.4rem" },
+            lineHeight: 1,
+            letterSpacing: "-0.03em",
+          }}
+        >
+          Horsenome
+        </Typography>
+      </div>
       <ClickAwayListener onClickAway={handleTooltipClose}>
         <Tooltip
           open={open}
-          arrow
           disableHoverListener
           disableFocusListener
           disableInteractive
           title={
             <>
-              <Typography variant="body1" gutterBottom>
-                Use the <b>Slider</b> to adjust BPM (Beats Per Minute).
+              <Typography variant="subtitle2" gutterBottom sx={{ fontWeight: 700 }}>
+                Quick help
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Use the <b>Dropdown</b> to set the beat pattern.
+                <b>Tempo slider</b>
+                <br />
+                Set the BPM.
               </Typography>
               <Typography variant="body1" gutterBottom>
-                Click the <b>Start/Stop</b> button to control playback.
+                <b>Beat selector</b>
+                <br />
+                Pick a taal or meter.
+              </Typography>
+              <Typography variant="body1">
+                <b>Start/Stop</b>
+                <br />
+                Begin or pause playback.
               </Typography>
             </>
           }
@@ -53,9 +79,24 @@ export const Header = () => {
           }}
           onDoubleClick={() => setOpen(!open)}
           onMouseLeave={handleTooltipClose}
+          slotProps={{
+            popper: {
+              disablePortal: true,
+            },
+          }}
         >
-          <IconButton>
-            <HelpOutlineIcon />
+          <IconButton
+            aria-label="quick help"
+            sx={{
+              width: 32,
+              height: 32,
+              color: "#3b6934",
+              "&:hover": {
+                backgroundColor: "rgba(59, 105, 52, 0.08)",
+              },
+            }}
+          >
+            <HelpOutlineIcon sx={{ fontSize: 20 }} />
           </IconButton>
         </Tooltip>
       </ClickAwayListener>

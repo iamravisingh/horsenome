@@ -1,71 +1,188 @@
-// import { useState } from "react";
 import { css } from "@linaria/core";
 import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import Grid from "@mui/material/Grid2";
-import ClapIcon from "../../assets/clapping-hands.svg";
-import OutlinedInput from "@mui/material/OutlinedInput";
+import { AnimatePresence, motion } from "framer-motion";
+import { useMemo, useState } from "react";
 import { useMetronome } from "../../hooks/useMetronome";
+import {
+  CUSTOM_METER_LIMITS,
+  DEFAULT_METER_PRESETS,
+} from "./constant";
+import MobileBeatControl from "./MobileBeatControl";
+import DesktopBeatControl from "./DesktopBeatControl";
 
-const beatsContainer = css`
+const beatControl = css`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+`;
+
+const customMeter = css`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 18px;
+  background: rgba(242, 244, 242, 0.92);
+  overflow: hidden;
+`;
+
+const customInputs = css`
+  display: flex;
+  align-items: center;
   gap: 10px;
-  align-items: end;
+`;
+
+const numberInput = css`
+  width: 60px;
+  height: 44px;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.78);
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #325f2c;
+  outline: none;
+  box-shadow: inset 0 0 0 1px rgba(193, 200, 193, 0.45);
+
+  &:focus {
+    box-shadow: inset 0 0 0 2px rgba(59, 105, 52, 0.28);
+  }
+`;
+
+const slash = css`
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgba(65, 73, 67, 0.75);
+`;
+
+const customLabel = css`
+  font-size: 0.62rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(113, 121, 115, 0.72);
+  font-weight: 700;
 `;
 
 const BeatControl = () => {
-  const { setBeatsPerMeasure, beatsPerMeasure } = useMetronome();
-  const handleChange = (e: SelectChangeEvent<unknown>) => {
-    const val = parseInt(e.target.value as string, 10);
-    setBeatsPerMeasure(val);
+  const { timeSignature, setTimeSignature } = useMetronome();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [showCustom, setShowCustom] = useState(false);
+  const [customBeats, setCustomBeats] = useState(String(timeSignature.beats));
+  const [customUnit, setCustomUnit] = useState(String(timeSignature.unit));
+
+  const selectedValue = useMemo(() => {
+    const preset = DEFAULT_METER_PRESETS.find(
+      (option) =>
+        option.beats === timeSignature.beats && option.unit === timeSignature.unit
+    );
+    return preset ? preset.value : "custom";
+  }, [timeSignature.beats, timeSignature.unit]);
+
+  const applyCustomMeter = (beatsValue: string, unitValue: string) => {
+    const beats = Math.min(
+      CUSTOM_METER_LIMITS.max,
+      Math.max(CUSTOM_METER_LIMITS.min, Number.parseInt(beatsValue || "1", 10))
+    );
+    const unit = Math.min(
+      CUSTOM_METER_LIMITS.max,
+      Math.max(
+        CUSTOM_METER_LIMITS.min,
+        Number.parseInt(unitValue || String(CUSTOM_METER_LIMITS.defaultUnit), 10)
+      )
+    );
+    setCustomBeats(String(beats));
+    setCustomUnit(String(unit));
+    setTimeSignature({ beats, unit });
+  };
+
+  const toggleCustom = () => {
+    setShowCustom((current) => !current);
+  };
+
+  const selectedPreset = DEFAULT_METER_PRESETS.find(
+    (option) =>
+      option.beats === timeSignature.beats && option.unit === timeSignature.unit
+  );
+
+  const handlePresetSelect = (value: string) => {
+    if (value === "custom") {
+      setShowCustom(true);
+      return;
+    }
+
+    const preset = DEFAULT_METER_PRESETS.find((option) => option.value === value);
+    if (!preset) {
+      return;
+    }
+
+    setShowCustom(false);
+    setTimeSignature({ beats: preset.beats, unit: preset.unit });
   };
 
   return (
-    <Grid container className={beatsContainer} justifyContent={"end"}>
-      <Grid size={{ xs: 12,  sm: 12, md: 12 }}>
-        <FormControl size="medium" fullWidth>
-          <InputLabel
-            id="bpm-input"
-            sx={{ display: "flex", alignItems: "center" }}
+    <div className={beatControl}>
+      {isMobile ? (
+        <MobileBeatControl
+          selectedValue={selectedValue}
+          selectedWesternNotation={selectedPreset?.westernNotation}
+          onPresetSelect={handlePresetSelect}
+        />
+      ) : (
+        <DesktopBeatControl
+          selectedValue={selectedValue}
+          showCustom={showCustom}
+          onPresetSelect={handlePresetSelect}
+          onToggleCustom={toggleCustom}
+        />
+      )}
+
+      <AnimatePresence initial={false}>
+        {showCustom ? (
+          <motion.div
+            key="custom-meter"
+            initial={{ opacity: 0, height: 0, y: -8, scale: 0.98 }}
+            animate={{ opacity: 1, height: "auto", y: 0, scale: 1 }}
+            exit={{ opacity: 0, height: 0, y: -8, scale: 0.98 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
           >
-            <img src={ClapIcon} style={{ width: 40, height: 40 }} />
-          </InputLabel>
-          <Select
-            fullWidth
-            id="bpm-input"
-            size="medium"
-            value={beatsPerMeasure}
-            label="Beats"
-            onChange={handleChange}
-            input={<OutlinedInput label="Beats" />}
-            MenuProps={{  
-              PaperProps: {
-                sx: {
-                  "& .MuiMenu-list": { padding: 0 },
-                  "& .MuiMenuItem-root": {
-                    justifyContent: "center",
-                    fontSize: 16,
-                  },
-                },
-              },
-            }}
-          >
-            <MenuItem disabled>
-              Beats <img src={ClapIcon} style={{ width: 30, height: 30 }} />
-            </MenuItem>
-            {Array.from({ length: 16 }, (_, i) => i + 1).map((beat) => (
-              <MenuItem key={beat} value={beat}>
-                {beat}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid>
-    </Grid>
+            <div className={customMeter}>
+              <div className={customInputs}>
+                <input
+                  className={numberInput}
+                  type="number"
+                  min={CUSTOM_METER_LIMITS.min}
+                  max={CUSTOM_METER_LIMITS.max}
+                  value={customBeats}
+                  aria-label="matras in cycle"
+                  onChange={(event) => setCustomBeats(event.target.value)}
+                  onBlur={() => applyCustomMeter(customBeats, customUnit)}
+                />
+                <span className={slash}>/</span>
+                <input
+                  className={numberInput}
+                  type="number"
+                  min={CUSTOM_METER_LIMITS.min}
+                  max={CUSTOM_METER_LIMITS.max}
+                  value={customUnit}
+                  aria-label="beat unit"
+                  onChange={(event) => setCustomUnit(event.target.value)}
+                  onBlur={() => applyCustomMeter(customBeats, customUnit)}
+                />
+              </div>
+              <span className={customLabel}>Custom</span>
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </div>
   );
 };
 
