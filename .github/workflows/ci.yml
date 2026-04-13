@@ -3,7 +3,7 @@ name: Horsenome CI
 on:
   push:
     branches:
-      - "**"
+      - main
   pull_request:
   workflow_dispatch:
 
@@ -14,7 +14,7 @@ concurrency:
 jobs:
   quality:
     name: Lint And Build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout repository
@@ -47,10 +47,15 @@ jobs:
           path: dist
           if-no-files-found: error
 
-  e2e:
-    name: Cypress E2E
-    runs-on: ubuntu-latest
+  integration-e2e-test:
+    name: Integration E2E Test
+    runs-on: ubuntu-24.04
     needs: quality
+    container:
+      image: cypress/included:15.13.1
+      options: --user 1001
+    env:
+      CYPRESS_INSTALL_BINARY: 0
 
     steps:
       - name: Checkout repository
@@ -100,10 +105,10 @@ jobs:
 
   deploy:
     name: Deploy Placeholder
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - quality
-      - e2e
+      - integration-e2e-test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     steps:

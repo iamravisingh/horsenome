@@ -103,25 +103,31 @@ Selector policy:
 
 GitHub Actions workflow:
 
-- `.github/ci.yml`
+- `.github/workflows/ci.yml`
 
 Current jobs:
 
 - `quality`: install, lint, build, upload `dist`
-- `e2e`: depends on `quality`, downloads `dist`, runs Cypress
-- `deploy`: placeholder job for `main`, depends on both `quality` and `e2e`
+- `integration-e2e-test`: depends on `quality`, downloads `dist`, runs Cypress
+- `deploy`: placeholder job for `main`, depends on both `quality` and `integration-e2e-test`
 
 Current triggers:
 
-- all branch pushes
+- pushes to `main`
 - all pull requests
 - manual dispatch
 
 This means the pipeline runs:
 
-- on feature branch pushes
 - on PRs targeting merge
 - again on the merged result when `main` receives the post-merge push
+
+CI implementation notes:
+
+- The integration test job runs in the `cypress/included:15.13.1` container.
+- This is used to keep the Cypress binary available in CI without a separate binary install step.
+- The `quality` job uploads the built `dist` directory as an artifact.
+- Dependent jobs download that artifact to verify the build output is available across job boundaries.
 
 ## Development Notes
 
