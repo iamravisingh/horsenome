@@ -109,7 +109,8 @@ Current jobs:
 
 - `quality`: install, lint, build, upload `dist`
 - `integration-e2e-test`: depends on `quality`, downloads `dist`, runs Cypress
-- `deploy`: placeholder job for `main`, depends on both `quality` and `integration-e2e-test`
+- `release`: runs on `main` after successful validation and manages release PRs / GitHub releases
+- `deploy`: placeholder job for `main`, depends on `quality`, `integration-e2e-test`, and `release`
 
 Current triggers:
 
@@ -128,6 +129,13 @@ CI implementation notes:
 - This is used to keep the Cypress binary available in CI without a separate binary install step.
 - The `quality` job uploads the built `dist` directory as an artifact.
 - Dependent jobs download that artifact to verify the build output is available across job boundaries.
+- Release automation uses `googleapis/release-please-action`.
+- Release Please works best with Conventional Commits such as `feat:`, `fix:`, and `chore:`.
+- Release Please does not tag every normal feature PR merge directly.
+- Instead, it updates or opens a release PR after validated changes land on `main`.
+- Merging that release PR creates the actual git tag and GitHub release.
+- If you want CI checks to run on Release Please PRs, add a repository secret named `RELEASE_PLEASE_TOKEN`.
+- Without that token, the fallback `GITHUB_TOKEN` can create release PRs and releases, but workflows triggered by those bot-created PRs will not run.
 
 ## Development Notes
 
