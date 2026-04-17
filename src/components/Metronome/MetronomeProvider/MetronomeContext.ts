@@ -13,6 +13,15 @@ export type TimeSignature = {
   unit: number;
 };
 
+export type VisualPulse = {
+  pulseId: number;
+  beatIndex: number;
+  subdivisionIndex: number;
+  isPrimaryAccent: boolean;
+  isSubdivision: boolean;
+  timestamp: number;
+};
+
 export interface IMetronomeContext {
   bpm: number;
   setBpm: (bpm: number) => void;
@@ -24,6 +33,7 @@ export interface IMetronomeContext {
   stopMetronome: () => void;
   timeSignature: TimeSignature;
   setTimeSignature: (signature: TimeSignature) => void;
+  visualPulse: VisualPulse | null;
   history: HistoryEntry[];
 }
 

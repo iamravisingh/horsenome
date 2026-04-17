@@ -7,7 +7,12 @@ import {
   useState,
 } from "react";
 import { Howl, Howler } from "howler";
-import { metronomeContext, HistoryEntry, TimeSignature } from "./MetronomeContext";
+import {
+  metronomeContext,
+  HistoryEntry,
+  TimeSignature,
+  VisualPulse,
+} from "./MetronomeContext";
 import {
   DEFAULT_METER_PRESET,
   DEFAULT_RHYTHM_MODE,
@@ -25,6 +30,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
   });
   const [isRunning, setIsRunning] = useState(false);
   const [rhythmMode, setRhythmModeState] = useState<RhythmMode>(DEFAULT_RHYTHM_MODE);
+  const [visualPulse, setVisualPulse] = useState<VisualPulse | null>(null);
   const [history, setHistory] = useState<HistoryEntry[]>([
     {
       id: "initial",
@@ -36,6 +42,8 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
   const timeoutRef = useRef<number | null>(null);
   const beatCountRef = useRef(0);
   const subdivisionStepRef = useRef(0);
+  const activeBeatRef = useRef(0);
+  const pulseIdRef = useRef(0);
   const rhythmPattern = getRhythmPattern(rhythmMode);
   const subdivisionCount = getSubdivisionCount(rhythmMode);
 
@@ -63,7 +71,22 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
   );
 
   const playPulse = useCallback(() => {
+    const subdivisionIndex = subdivisionStepRef.current;
+    const isSubdivision = subdivisionIndex > 0;
+    const beatIndex = isSubdivision ? activeBeatRef.current : beatCountRef.current;
+    const isPrimaryAccent = beatIndex === 0;
+
+    setVisualPulse({
+      pulseId: ++pulseIdRef.current,
+      beatIndex,
+      subdivisionIndex,
+      isPrimaryAccent,
+      isSubdivision,
+      timestamp: performance.now(),
+    });
+
     if (subdivisionStepRef.current === 0) {
+      activeBeatRef.current = beatCountRef.current;
       if (beatCountRef.current % timeSignature.beats === 0) {
         tickSound.play();
       } else {
@@ -105,6 +128,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
 
     setIsRunning(true);
     beatCountRef.current = 0;
+    activeBeatRef.current = 0;
     subdivisionStepRef.current = 0;
     playPulse();
     scheduleNextPulse();
@@ -127,6 +151,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
 
   const stopMetronome = useCallback(() => {
     setIsRunning(false);
+    setVisualPulse(null);
     Howler.stop();
     clearPlaybackTimer();
 
@@ -161,6 +186,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
     (signature: TimeSignature) => {
       setTimeSignatureState(signature);
       beatCountRef.current = 0;
+      activeBeatRef.current = 0;
       subdivisionStepRef.current = 0;
 
       pushHistory({
@@ -176,6 +202,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
     (mode: RhythmMode) => {
       setRhythmModeState(mode);
       beatCountRef.current = 0;
+      activeBeatRef.current = 0;
       subdivisionStepRef.current = 0;
 
       pushHistory({
@@ -210,6 +237,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
         stopMetronome,
         timeSignature,
         setTimeSignature,
+        visualPulse,
         history,
       }}
     >
