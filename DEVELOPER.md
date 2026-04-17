@@ -26,6 +26,12 @@ pnpm dev:test
 ```
 
 This starts Vite on `http://127.0.0.1:4173`.
+
+To serve the built app on the same host and port, use:
+
+```bash
+pnpm preview:test
+```
 ## Common Commands
 
 Quality and build:
@@ -49,7 +55,7 @@ Command intent:
 - `pnpm cy:open`: open Cypress locally in interactive mode
 - `pnpm cy:run`: run Cypress headless
 - `pnpm cy:headless`: explicit alias for headless Cypress
-- `pnpm test:e2e`: start the local test server, wait for readiness, then run Cypress
+- `pnpm test:e2e`: start the Vite preview server, wait for readiness, then run Cypress
 
 ## App Structure
 
@@ -128,7 +134,7 @@ CI implementation notes:
 - The integration test job runs in the `cypress/included:15.13.1` container.
 - This is used to keep the Cypress binary available in CI without a separate binary install step.
 - The `quality` job uploads the built `dist` directory as an artifact.
-- Dependent jobs download that artifact to verify the build output is available across job boundaries.
+- Dependent jobs download that artifact and run follow-up checks against the built output instead of rebuilding from source.
 - Release automation uses `googleapis/release-please-action`.
 - Release Please works best with Conventional Commits such as `feat:`, `fix:`, and `chore:`.
 - Release Please does not tag every normal feature PR merge directly.

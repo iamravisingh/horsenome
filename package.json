@@ -6,13 +6,14 @@
   "scripts": {
     "dev": "vite",
     "dev:test": "vite --host 127.0.0.1 --port 4173",
+    "preview:test": "vite preview --host 127.0.0.1 --port 4173",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "cy:headless": "cypress run",
-    "test:e2e": "start-server-and-test dev:test http://127.0.0.1:4173 cy:run"
+    "test:e2e": "start-server-and-test preview:test http://127.0.0.1:4173 cy:run"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

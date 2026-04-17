@@ -79,16 +79,16 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dist
-          path: ci-artifacts/dist
+          path: dist
 
       - name: Verify downloaded artifact
-        run: test -f ci-artifacts/dist/index.html
+        run: test -f dist/index.html
 
       - name: Run Cypress
         uses: cypress-io/github-action@v6
         with:
           install: false
-          start: pnpm dev:test
+          start: pnpm preview:test
           wait-on: http://127.0.0.1:4173
           wait-on-timeout: 120
           command: pnpm cy:headless
