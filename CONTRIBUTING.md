@@ -48,6 +48,8 @@ pnpm build
 pnpm test:e2e
 ```
 
+`pnpm test:e2e` serves the production build with Vite preview before running Cypress, which keeps local verification aligned with CI.
+
 ## Releases
 
 Releases are managed with Release Please.
