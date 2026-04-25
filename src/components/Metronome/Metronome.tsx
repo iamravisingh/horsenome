@@ -1,4 +1,5 @@
 import { css } from "@linaria/core";
+import { Suspense, lazy } from "react";
 import Typography from "@mui/material/Typography";
 import VolumeUpOutlinedIcon from "@mui/icons-material/VolumeUpOutlined";
 import VibrationOutlinedIcon from "@mui/icons-material/VibrationOutlined";
@@ -7,8 +8,9 @@ import BPMControl from "./BPMControl";
 import BeatControl from "./BeatControl";
 import RhythmControl from "./RhythmControl";
 import StartStopButton from "./StartStopButton";
-import TickTockAnimation from "../TickTock";
 import { useMetronome } from "../../hooks/useMetronome";
+
+const TickTockAnimation = lazy(() => import("../TickTock"));
 
 const metronomeSection = css`
   width: min(100%, 760px);
@@ -76,10 +78,14 @@ const controlsGrid = css`
 
 const visualizerWrap = css`
   width: 100%;
-  max-width: 360px;
+  max-width: 460px;
   padding-top: 2px;
   position: relative;
   z-index: 1;
+
+  @media (max-width: 600px) {
+    max-width: 100%;
+  }
 `;
 
 const actionRow = css`
@@ -114,6 +120,33 @@ const bpmCaption = css`
   color: #7b827b;
   font-weight: 700;
   line-height: 1;
+`;
+
+const visualizerFallback = css`
+  width: 100%;
+  height: 158px;
+  border-radius: 32px;
+  background:
+    linear-gradient(180deg, rgba(243, 247, 239, 0.98) 0%, rgba(228, 240, 224, 0.94) 100%);
+  border: 1px solid rgba(59, 105, 52, 0.12);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  position: relative;
+  overflow: hidden;
+
+  @media (max-width: 600px) {
+    height: 136px;
+    border-radius: 26px;
+  }
+`;
+
+const fallbackLabel = css`
+  position: absolute;
+  inset: 14px 18px auto;
+  font-size: 0.58rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(85, 97, 88, 0.78);
+  font-weight: 700;
 `;
 
 const Metronome = () => {
@@ -175,7 +208,15 @@ const Metronome = () => {
       </div>
 
       <div className={visualizerWrap}>
-        <TickTockAnimation />
+        <Suspense
+          fallback={(
+            <div className={visualizerFallback}>
+              <span className={fallbackLabel}>Loading visualizer</span>
+            </div>
+          )}
+        >
+          <TickTockAnimation />
+        </Suspense>
       </div>
 
       <RhythmControl />
