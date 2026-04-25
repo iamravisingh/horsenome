@@ -9,6 +9,7 @@ import BeatControl from "./BeatControl";
 import RhythmControl from "./RhythmControl";
 import StartStopButton from "./StartStopButton";
 import { useMetronome } from "../../hooks/useMetronome";
+import strings from "../../strings.json";
 
 const TickTockAnimation = lazy(() => import("../TickTock"));
 
@@ -151,6 +152,11 @@ const fallbackLabel = css`
 
 const Metronome = () => {
   const { bpm } = useMetronome();
+  const {
+    bpmCaption: bpmCaptionLabel,
+    actionLabels,
+    visualizerFallback: visualizerFallbackLabel,
+  } = strings.metronome;
 
   return (
     <div className={metronomeSection} data-testid="metronome-root">
@@ -180,7 +186,7 @@ const Metronome = () => {
         >
           {bpm}
         </Typography>
-        <Typography className={bpmCaption}>Beats Per Minute</Typography>
+        <Typography className={bpmCaption}>{bpmCaptionLabel}</Typography>
       </div>
 
       <div className={transport}>
@@ -195,15 +201,15 @@ const Metronome = () => {
       <div className={actionRow}>
         <div className={actionItem}>
           <VolumeUpOutlinedIcon sx={{ fontSize: 20 }} />
-          <Typography className={actionLabel}>Volume</Typography>
+          <Typography className={actionLabel}>{actionLabels.volume}</Typography>
         </div>
         <div className={actionItem} style={{ color: "#9db89e" }}>
           <VibrationOutlinedIcon sx={{ fontSize: 20 }} />
-          <Typography className={actionLabel}>Haptic</Typography>
+          <Typography className={actionLabel}>{actionLabels.haptic}</Typography>
         </div>
         <div className={actionItem}>
           <TimerOutlinedIcon sx={{ fontSize: 20 }} />
-          <Typography className={actionLabel}>Timer</Typography>
+          <Typography className={actionLabel}>{actionLabels.timer}</Typography>
         </div>
       </div>
 
@@ -211,7 +217,7 @@ const Metronome = () => {
         <Suspense
           fallback={(
             <div className={visualizerFallback}>
-              <span className={fallbackLabel}>Loading visualizer</span>
+              <span className={fallbackLabel}>{visualizerFallbackLabel}</span>
             </div>
           )}
         >

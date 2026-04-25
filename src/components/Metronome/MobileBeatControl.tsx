@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { DEFAULT_METER_PRESETS, PROTOTYPE_TERTIARY_TEXT } from "./constant";
+import strings from "../../strings.json";
 
 const mobileSelectorWrap = css`
   width: min(100%, 280px);
@@ -37,6 +38,7 @@ const MobileBeatControl = ({
   selectedWesternNotation,
   onPresetSelect,
 }: MobileBeatControlProps) => {
+  const { meterAriaLabel, custom: { label: customLabelText } } = strings.metronome.beatControl;
   return (
     <div className={mobileSelectorWrap}>
       <FormControl fullWidth>
@@ -45,7 +47,7 @@ const MobileBeatControl = ({
           displayEmpty
           onChange={(event: SelectChangeEvent<string>) => onPresetSelect(event.target.value)}
           IconComponent={ExpandMoreIcon}
-          aria-label="meter"
+          aria-label={meterAriaLabel}
           data-testid="mobile-meter-select"
           SelectDisplayProps={
             { "data-testid": "mobile-meter-select-display" } as HTMLAttributes<HTMLDivElement>
@@ -79,7 +81,7 @@ const MobileBeatControl = ({
               {option.label}
             </MenuItem>
           ))}
-          <MenuItem value="custom" data-testid="mobile-meter-option-custom">Custom</MenuItem>
+          <MenuItem value="custom" data-testid="mobile-meter-option-custom">{customLabelText}</MenuItem>
         </Select>
       </FormControl>
       {selectedWesternNotation ? (

@@ -12,6 +12,7 @@ import {
 } from "./constant";
 import MobileBeatControl from "./MobileBeatControl";
 import DesktopBeatControl from "./DesktopBeatControl";
+import strings from "../../strings.json";
 
 const beatControl = css`
   width: 100%;
@@ -77,6 +78,7 @@ const BeatControl = () => {
   const [showCustom, setShowCustom] = useState(false);
   const [customBeats, setCustomBeats] = useState(String(timeSignature.beats));
   const [customUnit, setCustomUnit] = useState(String(timeSignature.unit));
+  const { beatsAriaLabel, unitAriaLabel, label: customLabelText } = strings.metronome.beatControl.custom;
 
   const selectedValue = useMemo(() => {
     const preset = DEFAULT_METER_PRESETS.find(
@@ -162,7 +164,7 @@ const BeatControl = () => {
                   min={CUSTOM_METER_LIMITS.min}
                   max={CUSTOM_METER_LIMITS.max}
                   value={customBeats}
-                  aria-label="matras in cycle"
+                  aria-label={beatsAriaLabel}
                   onChange={(event) => setCustomBeats(event.target.value)}
                   onBlur={() => applyCustomMeter(customBeats, customUnit)}
                 />
@@ -174,12 +176,12 @@ const BeatControl = () => {
                   min={CUSTOM_METER_LIMITS.min}
                   max={CUSTOM_METER_LIMITS.max}
                   value={customUnit}
-                  aria-label="beat unit"
+                  aria-label={unitAriaLabel}
                   onChange={(event) => setCustomUnit(event.target.value)}
                   onBlur={() => applyCustomMeter(customBeats, customUnit)}
                 />
               </div>
-              <span className={customLabel} data-testid="custom-meter-label">Custom</span>
+              <span className={customLabel} data-testid="custom-meter-label">{customLabelText}</span>
             </div>
           </motion.div>
         ) : null}

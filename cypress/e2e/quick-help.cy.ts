@@ -4,20 +4,24 @@ describe("Quick help", () => {
     cy.visitApp();
   });
 
-  describe("help tooltip", () => {
-    it("opens the quick help content", () => {
+  describe("about dialog", () => {
+    it("opens the about dialog content", () => {
       cy.openQuickHelp();
-      cy.getByTestId("quick-help-tooltip").should("contain.text", "Quick help");
-      cy.getByTestId("quick-help-tooltip").should("contain.text", "Tempo slider");
-      cy.getByTestId("quick-help-tooltip").should("contain.text", "Beat selector");
+      cy.getByTestId("quick-help-dialog").should("be.visible");
+      cy.getByTestId("quick-help-dialog").should("contain.text", "About & Help");
+      cy.getByTestId("quick-help-dialog").should("contain.text", "Our Story");
+      cy.getByTestId("quick-help-dialog").should("contain.text", "Quick Start");
+      cy.getByTestId("quick-help-dialog").should("contain.text", "Made with Heart");
+      cy.getByTestId("quick-help-dialog").should("contain.text", "Issues");
+      cy.getByTestId("quick-help-dialog").should("contain.text", "Feedback");
     });
 
-    it("closes the tooltip when clicking away", () => {
+    it("closes the dialog when pressing the close button", () => {
       cy.openQuickHelp();
-      cy.getByTestId("quick-help-tooltip").should("be.visible");
+      cy.getByTestId("quick-help-dialog").should("be.visible");
 
-      cy.getByTestId("app-brand").click();
-      cy.getByTestId("quick-help-tooltip").should("not.exist");
+      cy.getByTestId("quick-help-close").click();
+      cy.getByTestId("quick-help-dialog").should("not.exist");
     });
   });
 });

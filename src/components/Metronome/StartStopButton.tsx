@@ -3,6 +3,7 @@ import Start from "../../assets/music-player-start.svg";
 import Stop from "../../assets/music-player-stop.svg";
 import { css } from "@linaria/core";
 import { useMetronome } from "../../hooks/useMetronome";
+import strings from "../../strings.json";
 
 const playButtonStyle = css`
   width: 112px;
@@ -32,6 +33,7 @@ const playButtonStyle = css`
 
 const StartStopButton = () => {
   const { isRunning, startMetronome, stopMetronome } = useMetronome();
+  const { startAlt, startAriaLabel, stopAlt, stopAriaLabel } = strings.metronome.transport;
   const playButton = isRunning ? Stop : Start;
   const onClick = isRunning ? stopMetronome : startMetronome;
   return (
@@ -39,13 +41,13 @@ const StartStopButton = () => {
       onClick={onClick}
       className={playButtonStyle}
       size="large"
-      aria-label={isRunning ? "stop metronome" : "start metronome"}
+      aria-label={isRunning ? stopAriaLabel : startAriaLabel}
       data-testid="transport-toggle"
       sx={{
         border: "1px solid rgba(31, 42, 29, 0.08)",
       }}
     >
-      <img src={playButton} alt={isRunning ? "stop" : "start"} />
+      <img src={playButton} alt={isRunning ? stopAlt : startAlt} />
     </IconButton>
   );
 };

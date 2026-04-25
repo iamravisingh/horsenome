@@ -1,0 +1,193 @@
+{
+  "header": {
+    "brand": "Horsenome",
+    "quickHelp": {
+      "triggerAriaLabel": "about horsenome",
+      "dialog": {
+        "title": "About & Help",
+        "badgeLabel": "Our Story",
+        "description": "Horsenome was born from the organic cadence of a horse's gallop and the resonant warmth of the dholak. We believe rhythm should not be clinical. It should feel alive.",
+        "quickStart": {
+          "title": "Quick Start",
+          "items": [
+            "Slide the horizontal track to dial in your precise tempo from 40 to 220 BPM.",
+            "Select your taal or time signature through the chips to change the rhythmic cycle.",
+            "Open rhythm settings to add subdivisions like duple, triplet, quad, or swing when you want more internal pulse.",
+            "Tap the central pulse button to start the horse visualizer and sound."
+          ]
+        },
+        "supportCard": {
+          "title": "Made with Heart",
+          "body": "for musicians and the rhythmic practice community"
+        },
+        "actions": {
+          "feedbackLabel": "Issues",
+          "feedbackHref": "https://github.com/iamravisingh/horsenome/issues",
+          "supportLabel": "Feedback",
+          "supportHref": "mailto:ravisingh29091996@gmail.com"
+        },
+        "closeAriaLabel": "close about dialog"
+      }
+    }
+  },
+  "tickTock": {
+    "hoverPrompt": "Wake Horsenome"
+  },
+  "footer": {
+    "title": "\"Horsenome\" Made with ❤️",
+    "description": "Horsenome brings the rhythm of nature into music, inspired by the steady gallop of a horse 🐎 and the resonant beats of the dholak's thappi. Feel the rhythm, embrace the melody, and let your creativity flow!"
+  },
+  "metronome": {
+    "bpmCaption": "Beats Per Minute",
+    "visualizerFallback": "Loading visualizer",
+    "actionLabels": {
+      "volume": "Volume",
+      "haptic": "Haptic",
+      "timer": "Timer"
+    },
+    "bpmControl": {
+      "ariaLabel": "tempo"
+    },
+    "transport": {
+      "startAriaLabel": "start metronome",
+      "stopAriaLabel": "stop metronome",
+      "startAlt": "start",
+      "stopAlt": "stop"
+    },
+    "beatControl": {
+      "meterAriaLabel": "meter",
+      "custom": {
+        "toggleAriaLabel": "custom meter",
+        "beatsAriaLabel": "matras in cycle",
+        "unitAriaLabel": "beat unit",
+        "label": "Custom"
+      }
+    },
+    "rhythm": {
+      "defaultLabel": "Off",
+      "triggerTooltip": "Rhythm settings",
+      "triggerAriaLabel": "rhythm settings",
+      "drawerTitle": "Rhythm",
+      "selectorDialogTitle": "Select Rhythm",
+      "selectorCancelLabel": "Cancel",
+      "selectorConfirmLabel": "Confirm"
+    },
+    "history": {
+      "title": "History",
+      "description": "Recent tempo changes and playback actions.",
+      "initialLabel": "Ready",
+      "startedLabel": "Started",
+      "stoppedLabel": "Stopped",
+      "tempoUpdatedLabel": "Tempo updated",
+      "meterUpdatedLabel": "Meter updated",
+      "rhythmUpdatedLabel": "Rhythm updated"
+    },
+    "meterPresets": [
+      {
+        "label": "Teental",
+        "notation": "16 matras",
+        "westernNotation": "16/4",
+        "value": "teental",
+        "beats": 16,
+        "unit": 4,
+        "tradition": "hindustani"
+      },
+      {
+        "label": "Ektal",
+        "notation": "12 matras",
+        "westernNotation": "12/4",
+        "value": "ektal",
+        "beats": 12,
+        "unit": 4,
+        "tradition": "hindustani"
+      },
+      {
+        "label": "Jhaptal",
+        "notation": "10 matras",
+        "westernNotation": "10/4",
+        "value": "jhaptal",
+        "beats": 10,
+        "unit": 4,
+        "tradition": "hindustani"
+      },
+      {
+        "label": "Rupak",
+        "notation": "7 matras",
+        "westernNotation": "7/4",
+        "value": "rupak",
+        "beats": 7,
+        "unit": 4,
+        "tradition": "hindustani"
+      },
+      {
+        "label": "Dadra",
+        "notation": "6 matras",
+        "westernNotation": "6/4",
+        "value": "dadra",
+        "beats": 6,
+        "unit": 4,
+        "tradition": "hindustani"
+      },
+      {
+        "label": "Keharwa",
+        "notation": "8 matras",
+        "westernNotation": "8/4",
+        "value": "keharwa",
+        "beats": 8,
+        "unit": 4,
+        "tradition": "hindustani"
+      }
+    ],
+    "rhythmOptions": [
+      {
+        "value": "off",
+        "label": "Off",
+        "caption": "Main beats only"
+      },
+      {
+        "value": "duple",
+        "label": "Duple",
+        "caption": "2 pulses per beat"
+      },
+      {
+        "value": "triplet",
+        "label": "Triplet",
+        "caption": "3 pulses per beat"
+      },
+      {
+        "value": "quad",
+        "label": "Quad",
+        "caption": "4 pulses per beat"
+      },
+      {
+        "value": "swing",
+        "label": "Swing",
+        "caption": "Long-short feel"
+      }
+    ],
+    "tempoLabels": [
+      { "label": "Larghissimo", "min": 1, "max": 24 },
+      { "label": "Grave", "min": 25, "max": 39 },
+      { "label": "Largo", "min": 40, "max": 54 },
+      { "label": "Lento", "min": 55, "max": 63 },
+      { "label": "Adagio", "min": 64, "max": 72 },
+      { "label": "Andante", "min": 73, "max": 108 },
+      { "label": "Moderato", "min": 109, "max": 120 },
+      { "label": "Allegretto", "min": 121, "max": 131 },
+      { "label": "Allegro", "min": 132, "max": 154 },
+      { "label": "Vivace", "min": 155, "max": 176 },
+      { "label": "Presto", "min": 177, "max": 200 },
+      { "label": "Prestissimo", "min": 201, "max": 999 }
+    ]
+  },
+  "floatingButton": {
+    "addAriaLabel": "add",
+    "editAriaLabel": "edit"
+  },
+  "rhythmSelector": {
+    "title": "Select Rhythm",
+    "cancelLabel": "Cancel",
+    "confirmLabel": "Confirm",
+    "options": ["4/4", "3/4", "6/8", "7/8"]
+  }
+}

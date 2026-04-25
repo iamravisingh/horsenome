@@ -2,6 +2,7 @@ import { HTMLAttributes } from "react";
 import { Slider } from "@mui/material";
 import { css } from "@linaria/core";
 import { useMetronome } from "../../hooks/useMetronome";
+import strings from "../../strings.json";
 
 const bpmControlContainer = css`
   display: flex;
@@ -36,6 +37,7 @@ const sliderRoot = css`
 
 const BPMControl = () => {
   const { bpm, setBpm } = useMetronome();
+  const { ariaLabel } = strings.metronome.bpmControl;
 
   return (
     <div className={bpmControlContainer}>
@@ -45,7 +47,7 @@ const BPMControl = () => {
         value={bpm}
         onChange={(_, value) => setBpm(value as number)}
         valueLabelDisplay="off"
-        aria-label="tempo"
+        aria-label={ariaLabel}
         className={sliderRoot}
         data-testid="bpm-slider"
         slotProps={{
