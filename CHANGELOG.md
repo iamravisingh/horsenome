@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/iamravisingh/horsenome/compare/horsenome-v1.1.0...horsenome-v1.2.0) (2026-04-25)
+
+
+### Features
+
+* redesign about dialog and refine feedback actions ([#13](https://github.com/iamravisingh/horsenome/issues/13)) ([ff67d67](https://github.com/iamravisingh/horsenome/commit/ff67d67e4e2ba616ae3a7641749d136e95507171))
+
 ## [1.1.0](https://github.com/iamravisingh/horsenome/compare/horsenome-v1.0.0...horsenome-v1.1.0) (2026-04-25)
 
 
