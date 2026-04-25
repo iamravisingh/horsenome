@@ -36,6 +36,7 @@ export const useTickTockVisualizer = () => {
   const beatIndexRef = useRef(0);
   const isSubdivisionRef = useRef(false);
   const cycleResetPendingRef = useRef(false);
+  const suppressStartJumpRef = useRef(false);
   const hoverCueRef = useRef<number | null>(null);
   const clickCueRef = useRef<number | null>(null);
   const startLeanRef = useRef<number | null>(null);
@@ -80,9 +81,7 @@ export const useTickTockVisualizer = () => {
       camera,
       renderer,
       scene,
-      track,
       trackBlocks,
-      horseShadow,
       horseHotspot,
       hoverRing,
       hoofMarkers,
@@ -138,10 +137,8 @@ export const useTickTockVisualizer = () => {
       loadHorseModel(scene, isMobile, horseStartX)
         .then((loadedHorseState) => {
           if (disposed) {
-            if (loadedHorseState.root) {
-              disposeMeshResources(loadedHorseState.root);
-            }
             loadedHorseState.mixer?.stopAllAction();
+            loadedHorseState.wrapper?.removeFromParent();
             return;
           }
 
@@ -213,6 +210,7 @@ export const useTickTockVisualizer = () => {
 
       if (latestRunningRef.current && !previousRunningRef.current) {
         startLeanRef.current = now;
+        suppressStartJumpRef.current = true;
       }
       previousRunningRef.current = latestRunningRef.current;
 
@@ -265,6 +263,9 @@ export const useTickTockVisualizer = () => {
         }
 
         if (!pulse.isSubdivision && pulse.isPrimaryAccent) {
+          if (suppressStartJumpRef.current && pulse.beatIndex === 0) {
+            suppressStartJumpRef.current = false;
+          } else {
           const durationMs = MathUtils.clamp((60 / Math.max(latestBpmRef.current, 1)) * 390, 170, isMobile ? 320 : 350);
           jumpRef.current = {
             startTime: pulse.timestamp,
@@ -275,6 +276,7 @@ export const useTickTockVisualizer = () => {
             horseState.jumpAction.reset();
             horseState.jumpAction.paused = false;
             horseState.jumpAction.play();
+          }
           }
         }
       }
@@ -404,12 +406,6 @@ export const useTickTockVisualizer = () => {
       );
       (hoverRing.material as MeshBasicMaterial).opacity = hoverBlendRef.current * 0.62 + clickCuePulse * 0.1;
 
-      horseShadow.position.x = horseX;
-      horseShadow.position.y = HORSE_BASE_Y - 0.08;
-      horseShadow.scale.x = 1 + (isMobile ? 0.08 : 0.1);
-      horseShadow.scale.y = 1 - Math.min(Math.max(horseY - HORSE_BASE_Y, 0), 0.8) * 0.18;
-      (horseShadow.material as MeshBasicMaterial).opacity = 0;
-
       if (
         horseState.root &&
         horseState.rootBasePosition &&
@@ -420,13 +416,13 @@ export const useTickTockVisualizer = () => {
         if (latestRunningRef.current) {
           if (horseState.wrapper) {
             horseState.wrapper.position.x = horseX + startLeanPulse * 0.08;
-            horseState.wrapper.position.y = horseY + runWrapperBob + startLeanPulse * 0.03;
+            horseState.wrapper.position.y = horseY + runWrapperBob;
             horseState.wrapper.rotation.x = HORSE_ROTATION_X - startLeanPulse * 0.06 - Math.max(runWrapperBob, 0) * 0.09;
             horseState.wrapper.rotation.z = HORSE_ROTATION_Z - startLeanPulse * 0.08 + runWrapperTilt;
           }
           horseState.root.position.set(
             horseState.rootBasePosition.x + startLeanPulse * 0.1,
-            horseState.rootBasePosition.y - startLeanPulse * 0.018 + runWrapperBob * 0.28,
+            horseState.rootBasePosition.y + runWrapperBob * 0.28,
             horseState.rootBasePosition.z
           );
           horseState.root.rotation.set(
@@ -541,8 +537,6 @@ export const useTickTockVisualizer = () => {
         puff.scale.setScalar(pulseScale);
         material.opacity = runTrail ? (isBurstVisible ? 0.42 : 0.12) : 0;
       });
-
-      track.position.x = 0;
       renderer.render(scene, camera);
       frameId = window.requestAnimationFrame(render);
     };
@@ -576,9 +570,7 @@ export const useTickTockVisualizer = () => {
       renderer.domElement.removeEventListener("pointerdown", handlePointerDown);
       container.removeChild(renderer.domElement);
       horseState.mixer?.stopAllAction();
-      if (horseState.root) {
-        disposeMeshResources(horseState.root);
-      }
+      horseState.wrapper?.removeFromParent();
       disposeMeshResources(scene);
       renderer.dispose();
     };

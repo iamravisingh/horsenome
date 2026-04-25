@@ -25,9 +25,7 @@ export type SceneHandles = {
   camera: OrthographicCamera;
   renderer: WebGLRenderer;
   scene: Scene;
-  track: Group;
   trackBlocks: Mesh[];
-  horseShadow: Mesh;
   horseHotspot: Mesh;
   hoverRing: Mesh;
   hoofMarkers: Mesh[];

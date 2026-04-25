@@ -161,17 +161,6 @@ export const createScene = (
   }
   scene.add(track);
 
-  const horseShadow = new Mesh(
-    new PlaneGeometry(isMobile ? 1.15 : 1.35, isMobile ? 0.28 : 0.32),
-    new MeshBasicMaterial({
-      color: "#26411f",
-      transparent: true,
-      opacity: 0,
-    })
-  );
-  horseShadow.position.set(horseStartX, HORSE_BASE_Y - 0.08, 0.15);
-  scene.add(horseShadow);
-
   const horseHotspot = new Mesh(
     new PlaneGeometry(isMobile ? 2.1 : 2.5, isMobile ? 1.7 : 1.95),
     new MeshBasicMaterial({
@@ -228,9 +217,7 @@ export const createScene = (
     camera,
     renderer,
     scene,
-    track,
     trackBlocks,
-    horseShadow,
     horseHotspot,
     hoverRing,
     hoofMarkers,
@@ -251,6 +238,10 @@ export const loadHorseModel = async (
       .then(({ GLTFLoader }) => {
         const loader = new GLTFLoader();
         return loader.loadAsync("/models/horse.glb");
+      })
+      .catch((error) => {
+        horseAssetPromise = null;
+        throw error;
       });
   }
 
