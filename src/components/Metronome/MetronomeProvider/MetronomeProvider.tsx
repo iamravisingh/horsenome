@@ -21,8 +21,17 @@ import {
   getSubdivisionCount,
   RhythmMode,
 } from "../constant";
+import strings from "../../../strings.json";
 
 export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => {
+  const {
+    initialLabel,
+    meterUpdatedLabel,
+    rhythmUpdatedLabel,
+    startedLabel,
+    stoppedLabel,
+    tempoUpdatedLabel,
+  } = strings.metronome.history;
   const [bpm, setBpmState] = useState(120);
   const [timeSignature, setTimeSignatureState] = useState<TimeSignature>({
     beats: DEFAULT_METER_PRESET.beats,
@@ -34,7 +43,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
   const [history, setHistory] = useState<HistoryEntry[]>([
     {
       id: "initial",
-      label: "Ready",
+      label: initialLabel,
       detail: `120 BPM · ${DEFAULT_METER_PRESET.label}`,
       tone: "neutral",
     },
@@ -133,7 +142,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
     playPulse();
     scheduleNextPulse();
     pushHistory({
-      label: "Started",
+      label: startedLabel,
       detail: getPlaybackDetail(timeSignature.beats, timeSignature.unit, bpm, rhythmMode),
       tone: "success",
     });
@@ -145,6 +154,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
     pushHistory,
     rhythmMode,
     scheduleNextPulse,
+    startedLabel,
     timeSignature.beats,
     timeSignature.unit,
   ]);
@@ -156,7 +166,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
     clearPlaybackTimer();
 
     pushHistory({
-      label: "Stopped",
+      label: stoppedLabel,
       detail: getPlaybackDetail(timeSignature.beats, timeSignature.unit, bpm, rhythmMode),
       tone: "neutral",
     });
@@ -166,6 +176,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
     getPlaybackDetail,
     pushHistory,
     rhythmMode,
+    stoppedLabel,
     timeSignature.beats,
     timeSignature.unit,
   ]);
@@ -174,12 +185,12 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
     (nextBpm: number) => {
       setBpmState(nextBpm);
       pushHistory({
-        label: "Tempo updated",
+        label: tempoUpdatedLabel,
         detail: `${nextBpm} BPM`,
         tone: "accent",
       });
     },
-    [pushHistory]
+    [pushHistory, tempoUpdatedLabel]
   );
 
   const setTimeSignature = useCallback(
@@ -190,12 +201,12 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
       subdivisionStepRef.current = 0;
 
       pushHistory({
-        label: "Meter updated",
+        label: meterUpdatedLabel,
         detail: `${signature.beats}/${signature.unit}`,
         tone: "accent",
       });
     },
-    [pushHistory]
+    [meterUpdatedLabel, pushHistory]
   );
 
   const setRhythmMode = useCallback(
@@ -206,12 +217,12 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
       subdivisionStepRef.current = 0;
 
       pushHistory({
-        label: "Rhythm updated",
+        label: rhythmUpdatedLabel,
         detail: getRhythmLabel(mode),
         tone: "accent",
       });
     },
-    [pushHistory]
+    [pushHistory, rhythmUpdatedLabel]
   );
 
   useEffect(() => {

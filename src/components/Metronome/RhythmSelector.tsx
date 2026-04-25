@@ -11,11 +11,12 @@ import {
   FormControlLabel,
   Radio,
 } from "@mui/material";
-// import Grid from "@mui/material/Grid2";
+import strings from "../../strings.json";
 
 const RhythmSelector = () => {
   const [open, setOpen] = useState(false);
-  const [selectedRhythm, setSelectedRhythm] = useState("4/4");
+  const { cancelLabel, confirmLabel, options, title } = strings.rhythmSelector;
+  const [selectedRhythm, setSelectedRhythm] = useState(options[0]);
 
   const handleChipClick = () => setOpen(true);
   const handleDialogClose = () => setOpen(false);
@@ -40,21 +41,20 @@ const RhythmSelector = () => {
       />
 
       <Dialog open={open} onClose={handleDialogClose}>
-        <DialogTitle>Select Rhythm</DialogTitle>
+        <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           <FormControl>
             <RadioGroup value={selectedRhythm} onChange={handleRhythmChange}>
-              <FormControlLabel value="4/4" control={<Radio />} label="4/4" />
-              <FormControlLabel value="3/4" control={<Radio />} label="3/4" />
-              <FormControlLabel value="6/8" control={<Radio />} label="6/8" />
-              <FormControlLabel value="7/8" control={<Radio />} label="7/8" />
+              {options.map((option) => (
+                <FormControlLabel key={option} value={option} control={<Radio />} label={option} />
+              ))}
             </RadioGroup>
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDialogClose}>Cancel</Button>
+          <Button onClick={handleDialogClose}>{cancelLabel}</Button>
           <Button onClick={handleConfirm} color="primary">
-            Confirm
+            {confirmLabel}
           </Button>
         </DialogActions>
       </Dialog>

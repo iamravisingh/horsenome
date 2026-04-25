@@ -3,6 +3,7 @@ import { Box, Chip, Stack, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import { css } from "@linaria/core";
 import { DEFAULT_METER_PRESETS, PROTOTYPE_TERTIARY_TEXT } from "./constant";
+import strings from "../../strings.json";
 
 const chipRow = css`
   justify-content: center;
@@ -22,13 +23,14 @@ const DesktopBeatControl = ({
   onPresetSelect,
   onToggleCustom,
 }: DesktopBeatControlProps) => {
+  const { meterAriaLabel, custom: { toggleAriaLabel } } = strings.metronome.beatControl;
   return (
     <Stack
       direction="row"
       spacing={1.5}
       useFlexGap
       className={chipRow}
-      aria-label="meter"
+      aria-label={meterAriaLabel}
       data-testid="desktop-meter-control"
     >
       {DEFAULT_METER_PRESETS.map((option) => (
@@ -80,7 +82,7 @@ const DesktopBeatControl = ({
       ))}
       <Chip
         clickable
-        aria-label="custom meter"
+        aria-label={toggleAriaLabel}
         onClick={onToggleCustom}
         data-testid="custom-meter-toggle"
         data-selected={showCustom ? "true" : "false"}

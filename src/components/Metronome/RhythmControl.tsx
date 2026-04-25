@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import { useMetronome } from "../../hooks/useMetronome";
 import { RHYTHM_OPTIONS, RhythmMode } from "./constant";
+import strings from "../../strings.json";
 
 const triggerWrap = css`
   position: fixed;
@@ -73,10 +74,16 @@ const RhythmControl = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const {
+    defaultLabel,
+    drawerTitle,
+    triggerAriaLabel,
+    triggerTooltip,
+  } = strings.metronome.rhythm;
 
   const selectedLabel = useMemo(
-    () => RHYTHM_OPTIONS.find((option) => option.value === rhythmMode)?.label ?? "Off",
-    [rhythmMode]
+    () => RHYTHM_OPTIONS.find((option) => option.value === rhythmMode)?.label ?? defaultLabel,
+    [defaultLabel, rhythmMode]
   );
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -100,9 +107,9 @@ const RhythmControl = () => {
 
   return (
     <div className={triggerWrap}>
-      <Tooltip title="Rhythm settings" placement="left">
+      <Tooltip title={triggerTooltip} placement="left">
         <IconButton
-          aria-label="rhythm settings"
+          aria-label={triggerAriaLabel}
           onClick={handleOpen}
           data-testid="rhythm-trigger"
           sx={{
@@ -206,7 +213,7 @@ const RhythmControl = () => {
         <div className={drawerBody}>
           <div className={drawerHandle} />
           <Typography sx={{ px: 1.5, pb: 1.5, fontSize: "0.78rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#717973" }}>
-            Rhythm
+            {drawerTitle}
           </Typography>
           {RHYTHM_OPTIONS.map((option) => {
             const selected = option.value === rhythmMode;

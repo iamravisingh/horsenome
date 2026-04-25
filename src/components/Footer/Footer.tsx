@@ -1,4 +1,5 @@
 import { css } from "@linaria/core";
+import strings from "../../strings.json";
 
 const footerContainer = css`
 //   width: fit-content;
@@ -21,13 +22,12 @@ const descriptionText = css`
 `;
 
 export const Footer = () => {
+  const { title, description } = strings.footer;
   return (
     <div className={footerContainer}>
-      "<i>Horsenome</i>" Made with ❤️
+      {title}
       <div className={descriptionText}>
-        Horsenome brings the rhythm of nature into music, inspired by the steady
-        gallop of a horse 🐎 and the resonant beats of the dholak's thappi. Feel
-        the rhythm, embrace the melody, and let your creativity flow!
+        {description}
       </div>
     </div>
   );

@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useMetronome } from "../../hooks/useMetronome";
+import strings from "../../strings.json";
 
 const panel = css`
   display: flex;
@@ -38,15 +39,16 @@ const toneStyles: Record<string, string> = {
 
 const HistoryPanel = () => {
   const { history } = useMetronome();
+  const { description, title } = strings.metronome.history;
 
   return (
     <Paper elevation={0} className={panel}>
       <Box>
         <Typography variant="overline" sx={{ letterSpacing: "0.24em", color: "rgba(31, 42, 29, 0.55)" }}>
-          History
+          {title}
         </Typography>
         <Typography variant="body2" sx={{ color: "rgba(31, 42, 29, 0.6)" }}>
-          Recent tempo changes and playback actions.
+          {description}
         </Typography>
       </Box>
       <List className={historyList}>
