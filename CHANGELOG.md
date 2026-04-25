@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/iamravisingh/horsenome/compare/horsenome-v1.0.0...horsenome-v1.1.0) (2026-04-25)
+
+
+### Features
+
+* add interactive horse visualizer with animated track ([cfcd2b1](https://github.com/iamravisingh/horsenome/commit/cfcd2b1a08a999e5bdada1fbb18656a8b4f24359))
+
 ## 1.0.0 (2026-04-17)
 
 
