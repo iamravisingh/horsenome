@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/iamravisingh/horsenome/compare/horsenome-v1.2.0...horsenome-v1.3.0) (2026-05-01)
+
+
+### Features
+
+* vercel metadata and prd deployent setup ([#15](https://github.com/iamravisingh/horsenome/issues/15)) ([576b8cb](https://github.com/iamravisingh/horsenome/commit/576b8cbd2c4c945d504b612fb4dedb598d93c567))
+
 ## [1.2.0](https://github.com/iamravisingh/horsenome/compare/horsenome-v1.1.0...horsenome-v1.2.0) (2026-04-25)
 
 
