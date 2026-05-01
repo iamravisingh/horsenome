@@ -124,7 +124,7 @@ jobs:
           manifest-file: .github/.release-please-manifest.json
 
   deploy:
-    name: Deploy Placeholder
+    name: Vercel Deployment Managed Externally
     runs-on: ubuntu-24.04
     needs:
       - quality
@@ -142,5 +142,5 @@ jobs:
       - name: Verify deploy artifact
         run: test -f dist/index.html
 
-      - name: Deploy the application
-        run: echo "Deploy steps go here"
+      - name: Note deployment ownership
+        run: echo "Production deployment is handled by Vercel after the repository is linked in the Vercel dashboard."
