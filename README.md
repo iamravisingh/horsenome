@@ -33,3 +33,23 @@ Current interface highlights:
 ![Horsenome mobile overview](https://github.com/user-attachments/assets/389a557a-b58b-4724-aef3-abb40f8554fc)
 
 ![Horsenome mobile rhythm sheet](https://github.com/user-attachments/assets/8ae3ea3e-1f06-495c-9b4b-4359834db2a6)
+
+## Deployment
+
+Horsenome is configured for deployment on Vercel as a static Vite app.
+
+- Canonical production URL: `https://www.horsenome.com/`
+- Apex redirect: `https://horsenome.com` redirects to `https://www.horsenome.com`
+- Vercel config lives in [`vercel.json`](./vercel.json)
+- App-owned site metadata lives in [`src/config/site.ts`](./src/config/site.ts)
+- Search/share metadata is emitted from [`index.html`](./index.html) through `vite.config.ts`
+
+Launch checklist:
+
+- import the repo into Vercel
+- keep the detected framework as `Vite`
+- ensure the build command is `pnpm build`
+- ensure the output directory is `dist`
+- add both `horsenome.com` and `www.horsenome.com` to the Vercel project
+- set `www.horsenome.com` as the primary domain
+- confirm DNS records in Vercel for the apex and `www` host

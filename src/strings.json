@@ -22,9 +22,9 @@
         },
         "actions": {
           "feedbackLabel": "Issues",
-          "feedbackHref": "https://github.com/iamravisingh/horsenome/issues",
           "supportLabel": "Feedback",
-          "supportHref": "mailto:ravisingh29091996@gmail.com"
+          "supportTooltip": "Send email feedback",
+          "feedbackTooltip": "Open GitHub issues"
         },
         "closeAriaLabel": "close about dialog"
       }
