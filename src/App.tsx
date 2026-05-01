@@ -6,15 +6,17 @@ import { MetronomeProvider } from "./components/Metronome/MetronomeProvider";
 import "./App.css";
 
 const appContainer = css`
-  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   padding: 20px 0 0;
   overflow: hidden;
+  box-sizing: border-box;
 `;
 
 const mainContent = css`
   flex: 1;
+  min-height: 0;
   display: flex;
   align-items: center;
   overflow: hidden;

@@ -30,10 +30,10 @@ const metronomeSection = css`
   @media (min-width: 601px) {
     height: auto;
     max-height: none;
-    min-height: calc(100vh - 108px);
+    min-height: 0;
     justify-content: flex-start;
-    padding-top: 20px;
-    padding-bottom: 24px;
+    padding-top: 12px;
+    padding-bottom: 16px;
     overflow: visible;
   }
 `;
