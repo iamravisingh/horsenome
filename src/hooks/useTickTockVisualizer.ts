@@ -35,7 +35,6 @@ export const useTickTockVisualizer = () => {
   const beatStartTimeRef = useRef<number | null>(null);
   const beatIndexRef = useRef(0);
   const isSubdivisionRef = useRef(false);
-  const cycleResetPendingRef = useRef(false);
   const suppressStartJumpRef = useRef(false);
   const hoverCueRef = useRef<number | null>(null);
   const clickCueRef = useRef<number | null>(null);
@@ -258,10 +257,6 @@ export const useTickTockVisualizer = () => {
         beatIndexRef.current = pulse.beatIndex;
         isSubdivisionRef.current = pulse.isSubdivision;
 
-        if (!pulse.isSubdivision && pulse.beatIndex === 0 && pulse.pulseId > 1) {
-          cycleResetPendingRef.current = true;
-        }
-
         if (!pulse.isSubdivision && pulse.isPrimaryAccent) {
           if (suppressStartJumpRef.current && pulse.beatIndex === 0) {
             suppressStartJumpRef.current = false;
@@ -288,9 +283,6 @@ export const useTickTockVisualizer = () => {
         : 0;
       const beatCount = Math.max(latestSignatureRef.current.beats, 1);
       const currentBeatIndex = beatIndexRef.current % beatCount;
-      const cycleProgress = latestRunningRef.current
-        ? (currentBeatIndex + beatProgress) / beatCount
-        : 0;
       const isPreAccentBeat = currentBeatIndex === beatCount - 1 && !isSubdivisionRef.current;
       runBlendRef.current = MathUtils.damp(
         runBlendRef.current,
@@ -341,33 +333,27 @@ export const useTickTockVisualizer = () => {
       const trackOffset = activeStepCount > 0
         ? trackScrollRef.current % Math.max(loopLength, stepSpacing)
         : 0;
-      const horseLaneStartX = horseStartX + (isMobile ? 0.22 : 0.3);
+      const horseLaneStartX = horseStartX + (isMobile ? 0.34 : 0.46);
       const horseLaneEndX = Math.min(
-        horseStartX + (isMobile ? 0.82 : 1.08),
-        trackEndX - (isMobile ? 1.45 : 1.9)
+        horseLaneStartX + (isMobile ? 0.52 : 0.7),
+        trackEndX - (isMobile ? 1.7 : 2.05)
       );
-      const horsePathProgress = latestRunningRef.current
-        ? MathUtils.smootherstep(cycleProgress, 0, 1) * runBlendRef.current
+      const horseLaneCenterX = (horseLaneStartX + horseLaneEndX) / 2;
+      const horseLaneAmplitude = Math.max((horseLaneEndX - horseLaneStartX) * 0.5, 0.001);
+      const horsePhraseDrift = latestRunningRef.current
+        ? Math.sin(now / (isMobile ? 4600 : 5400)) * horseLaneAmplitude * 0.12 * runBlendRef.current
         : 0;
-      const horseAnchorX = MathUtils.lerp(horseLaneStartX, horseLaneEndX, horsePathProgress);
-      const horseRunLead = latestRunningRef.current
-        ? MathUtils.smootherstep(beatProgress, 0.08, 1) * stepSpacing * 0.18 * runBlendRef.current
+      const horseStrideSurge = latestRunningRef.current
+        ? Math.sin(beatProgress * Math.PI) * stepSpacing * 0.16 * runBlendRef.current
+        : 0;
+      const accentRecoil = latestRunningRef.current && isPreAccentBeat
+        ? -Math.sin(Math.max(0, (beatProgress - 0.58) / 0.42) * Math.PI * 0.5) * stepSpacing * 0.08
         : 0;
       const horseStrideDrift = latestRunningRef.current
         ? Math.sin(now / Math.max(110, 760 - latestBpmRef.current * 1.8)) * (isMobile ? 0.016 : 0.024) * runBlendRef.current
         : 0;
-      const horseTargetX = horseAnchorX + horseRunLead + horseStrideDrift + jumpCarry;
+      const horseTargetX = horseLaneCenterX + horsePhraseDrift + horseStrideSurge + accentRecoil + horseStrideDrift + jumpCarry;
       const horseTargetY = HORSE_BASE_Y + jumpOffset;
-
-      if (
-        latestRunningRef.current
-        && cycleResetPendingRef.current
-        && beatProgress < 0.12
-        && horsePositionRef.current.x > horseLaneEndX - stepSpacing * 0.2
-      ) {
-        horsePositionRef.current.x = horseLaneStartX - stepSpacing * 0.02;
-        cycleResetPendingRef.current = false;
-      }
 
       horsePositionRef.current.x = MathUtils.damp(
         horsePositionRef.current.x,

@@ -43,7 +43,34 @@
     "actionLabels": {
       "volume": "Volume",
       "haptic": "Haptic",
-      "timer": "Timer"
+      "timer": "Timer",
+      "hapticTooltip": "Haptic feedback is planned for a later release"
+    },
+    "volumeControl": {
+      "title": "Volume",
+      "helperText": "Controls metronome and milestone sounds",
+      "triggerAriaLabel": "volume settings",
+      "sliderAriaLabel": "master volume"
+    },
+    "timerControl": {
+      "title": "Practice Timer",
+      "helperText": "Tracks practice time without affecting playback",
+      "milestoneHelper": "Encouragement every 5 minutes",
+      "triggerAriaLabel": "practice timer settings",
+      "offLabel": "Off",
+      "durationLabel": "Duration",
+      "pickerHelper": "Drag to choose any session length from 1 to 60 minutes",
+      "minutesSuffix": "min",
+      "countdownSuffix": "left",
+      "completionTitle": "Session complete",
+      "completionMessage": "Strong work. Take a breath and go again when ready.",
+      "milestoneTitleSuffix": "minutes in",
+      "encouragementBodies": [
+        "Strong work. Keep the pulse steady.",
+        "You are locked in. Stay with the groove.",
+        "Nice consistency. Let the rhythm breathe.",
+        "You are doing great. Keep going."
+      ]
     },
     "bpmControl": {
       "ariaLabel": "tempo"

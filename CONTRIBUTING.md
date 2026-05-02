@@ -48,7 +48,7 @@ pnpm build
 pnpm test:e2e
 ```
 
-`pnpm test:e2e` serves the production build with Vite preview before running Cypress, which keeps local verification aligned with CI.
+`pnpm test:e2e` starts the dedicated Cypress dev server on port `3000` before running the suite, which matches the current CI flow.
 
 ## Releases
 

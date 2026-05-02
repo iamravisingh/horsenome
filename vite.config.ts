@@ -5,6 +5,14 @@ import { siteConfig, siteMetadata } from "./src/config/site";
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    host: "localhost",
+    port: 3000,
+  },
+  preview: {
+    host: "localhost",
+    port: 3000,
+  },
   plugins: [
     {
       name: "horsenome-html-metadata",

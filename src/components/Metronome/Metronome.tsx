@@ -1,13 +1,12 @@
 import { css } from "@linaria/core";
 import { Suspense, lazy } from "react";
 import Typography from "@mui/material/Typography";
-import VolumeUpOutlinedIcon from "@mui/icons-material/VolumeUpOutlined";
-import VibrationOutlinedIcon from "@mui/icons-material/VibrationOutlined";
-import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
 import BPMControl from "./BPMControl";
 import BeatControl from "./BeatControl";
+import PracticeSessionStatus from "./PracticeSessionStatus";
 import RhythmControl from "./RhythmControl";
 import StartStopButton from "./StartStopButton";
+import UtilityActionRow from "./UtilityActionRow";
 import { useMetronome } from "../../hooks/useMetronome";
 import strings from "../../strings.json";
 
@@ -16,22 +15,22 @@ const TickTockAnimation = lazy(() => import("../TickTock"));
 const metronomeSection = css`
   width: min(100%, 760px);
   margin: 0 auto;
-  height: 100%;
-  max-height: calc(100vh - 88px);
-  padding: clamp(16px, 2.4vw, 24px) 0 20px;
+  min-height: auto;
+  padding: clamp(16px, 2.4vw, 24px) 0 28px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: 22px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 
   @media (min-width: 601px) {
     height: auto;
     max-height: none;
-    min-height: calc(100vh - 108px);
+    min-height: calc(100dvh - 108px);
     justify-content: flex-start;
+    gap: 22px;
     padding-top: 20px;
     padding-bottom: 24px;
     overflow: visible;
@@ -89,31 +88,6 @@ const visualizerWrap = css`
   }
 `;
 
-const actionRow = css`
-  display: flex;
-  justify-content: center;
-  gap: clamp(28px, 5vw, 54px);
-  padding-top: 2px;
-  color: rgba(45, 90, 39, 0.24);
-  position: relative;
-  z-index: 1;
-`;
-
-const actionItem = css`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  min-width: 64px;
-`;
-
-const actionLabel = css`
-  font-size: 0.56rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(113, 121, 115, 0.64);
-`;
-
 const bpmCaption = css`
   font-size: 0.78rem;
   letter-spacing: 0.16em;
@@ -128,7 +102,7 @@ const visualizerFallback = css`
   height: 158px;
   border-radius: 32px;
   background:
-    linear-gradient(180deg, rgba(243, 247, 239, 0.98) 0%, rgba(228, 240, 224, 0.94) 100%);
+  linear-gradient(180deg, rgba(243, 247, 239, 0.98) 0%, rgba(228, 240, 224, 0.94) 100%);
   border: 1px solid rgba(59, 105, 52, 0.12);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
   position: relative;
@@ -154,7 +128,6 @@ const Metronome = () => {
   const { bpm } = useMetronome();
   const {
     bpmCaption: bpmCaptionLabel,
-    actionLabels,
     visualizerFallback: visualizerFallbackLabel,
   } = strings.metronome;
 
@@ -198,22 +171,10 @@ const Metronome = () => {
         <BeatControl />
       </div>
 
-      <div className={actionRow}>
-        <div className={actionItem}>
-          <VolumeUpOutlinedIcon sx={{ fontSize: 20 }} />
-          <Typography className={actionLabel}>{actionLabels.volume}</Typography>
-        </div>
-        <div className={actionItem} style={{ color: "#9db89e" }}>
-          <VibrationOutlinedIcon sx={{ fontSize: 20 }} />
-          <Typography className={actionLabel}>{actionLabels.haptic}</Typography>
-        </div>
-        <div className={actionItem}>
-          <TimerOutlinedIcon sx={{ fontSize: 20 }} />
-          <Typography className={actionLabel}>{actionLabels.timer}</Typography>
-        </div>
-      </div>
+      <UtilityActionRow />
 
       <div className={visualizerWrap}>
+        <PracticeSessionStatus />
         <Suspense
           fallback={(
             <div className={visualizerFallback}>

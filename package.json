@@ -5,15 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:test": "vite --host 127.0.0.1 --port 4173",
-    "preview:test": "vite preview --host 127.0.0.1 --port 4173",
+    "dev:test": "vite --host 0.0.0.0 --port 3000",
+    "preview:test": "vite preview --host 0.0.0.0 --port 3000",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "cy:open": "cypress open",
     "cy:run": "cypress run",
     "cy:headless": "cypress run",
-    "test:e2e": "start-server-and-test preview:test http://127.0.0.1:4173 cy:run"
+    "cy:run:local": "cypress run",
+    "cy:run:prod": "CYPRESS_TARGET=prod cypress run",
+    "cy:open:local": "start-server-and-test dev:test http://127.0.0.1:3000 \"cypress open\"",
+    "cy:open:prod": "CYPRESS_TARGET=prod cypress open",
+    "test:e2e": "start-server-and-test dev:test http://127.0.0.1:3000 cy:run:local"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

@@ -11,6 +11,10 @@ concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  CYPRESS_TARGET: local
+  CYPRESS_BASE_URL: http://127.0.0.1:3000
+
 jobs:
   quality:
     name: Lint And Build
@@ -88,8 +92,8 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           install: false
-          start: pnpm preview:test
-          wait-on: http://127.0.0.1:4173
+          start: pnpm dev:test
+          wait-on: ${{ env.CYPRESS_BASE_URL }}
           wait-on-timeout: 120
           command: pnpm cy:headless
 
