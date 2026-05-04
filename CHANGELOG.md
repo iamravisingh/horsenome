@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/iamravisingh/horsenome/compare/horsenome-v1.3.0...horsenome-v1.4.0) (2026-05-04)
+
+
+### Features
+
+* added volume and timer functionality ([#18](https://github.com/iamravisingh/horsenome/issues/18)) ([8cdee78](https://github.com/iamravisingh/horsenome/commit/8cdee782374970b1a4237c3ae6fc9c4defa50348))
+
 ## [1.3.0](https://github.com/iamravisingh/horsenome/compare/horsenome-v1.2.0...horsenome-v1.3.0) (2026-05-01)
 
 
