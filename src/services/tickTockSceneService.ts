@@ -120,8 +120,9 @@ export const createScene = (
     0.1,
     100
   );
-  camera.position.set(0, 0.92, 10);
-  camera.lookAt(0, 0.92, 0);
+  const cameraFocusY = isMobile ? 0.92 : 0.92;
+  camera.position.set(0, cameraFocusY, 10);
+  camera.lookAt(0, cameraFocusY, 0);
 
   const sunLight = new DirectionalLight("#fff4d4", 1.8);
   sunLight.position.set(4, 7, 5);

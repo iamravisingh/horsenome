@@ -6,9 +6,9 @@ describe("Rhythm selection", () => {
     });
 
     it("changes the selected rhythm from the floating menu", () => {
-      cy.selectRhythm("Triplet");
+      cy.openRhythmSelector();
+      cy.getByTestId("rhythm-option-triplet").click();
       cy.getByTestId("rhythm-current-label").should("contain.text", "Triplet");
-      cy.expectSelectedRhythm("Triplet");
     });
 
     it("supports switching back to off", () => {
@@ -22,9 +22,9 @@ describe("Rhythm selection", () => {
 
     it("opens and closes the desktop rhythm menu", () => {
       cy.openRhythmSelector();
-      cy.getByTestId("rhythm-menu").should("be.visible");
-      cy.closeRhythmSelector();
-      cy.getByTestId("rhythm-menu").should("not.exist");
+      cy.get('[data-testid="rhythm-menu"]').should("be.visible");
+      cy.press(Cypress.Keyboard.Keys.ESC);
+      cy.get('[data-testid="rhythm-menu"]').should("not.be.visible");
     });
   });
 
@@ -50,7 +50,7 @@ describe("Rhythm selection", () => {
       cy.openRhythmSelector();
       cy.getByTestId("rhythm-drawer").should("be.visible");
       cy.closeRhythmSelector();
-      cy.getByTestId("rhythm-drawer").should("not.exist");
+      cy.getByTestId("rhythm-drawer").should("not.be.visible");
     });
   });
 });

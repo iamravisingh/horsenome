@@ -6,18 +6,26 @@ import { MetronomeProvider } from "./components/Metronome/MetronomeProvider";
 import "./App.css";
 
 const appContainer = css`
-  height: 100vh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
-  padding: 20px 0 0;
+  padding: 12px 0 0;
   overflow: hidden;
+
+  @media (min-width: 601px) {
+    min-height: 100dvh;
+    padding-top: 20px;
+    overflow: hidden;
+  }
 `;
 
 const mainContent = css`
   flex: 1;
+  min-height: 0;
   display: flex;
-  align-items: center;
-  overflow: hidden;
+  align-items: flex-start;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   @media (min-width: 601px) {
     align-items: flex-start;

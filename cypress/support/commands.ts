@@ -22,7 +22,7 @@ const rhythmValueMap: Record<string, string> = {
 const normalizeKey = (value: string) => value.trim().toLowerCase();
 
 const closeRhythmSurface = () => {
-  cy.get("body").type("{esc}");
+  cy.press(Cypress.Keyboard.Keys.ESC);
 };
 
 declare global {

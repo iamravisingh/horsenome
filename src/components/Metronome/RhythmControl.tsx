@@ -8,11 +8,11 @@ import LooksTwoIcon from "@mui/icons-material/LooksTwo";
 import ShowChartRoundedIcon from "@mui/icons-material/ShowChartRounded";
 import {
   Box,
-  Drawer,
   IconButton,
   ListItemButton,
   ListItemText,
   Menu,
+  SwipeableDrawer,
   Tooltip,
   Typography,
   useMediaQuery,
@@ -24,8 +24,8 @@ import strings from "../../strings.json";
 
 const triggerWrap = css`
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  right: max(16px, calc(env(safe-area-inset-right) + 16px));
+  bottom: max(16px, calc(env(safe-area-inset-bottom) + 16px));
   z-index: 20;
 
   @media (min-width: 601px) {
@@ -130,91 +130,32 @@ const RhythmControl = () => {
         </IconButton>
       </Tooltip>
 
-      <Menu
-        anchorEl={anchorEl}
-        open={!isMobile && Boolean(anchorEl)}
-        onClose={handleClose}
-        MenuListProps={
-          { "data-testid": "rhythm-menu" } as HTMLAttributes<HTMLUListElement>
-        }
-        anchorOrigin={{ vertical: "top", horizontal: "left" }}
-        transformOrigin={{ vertical: "bottom", horizontal: "right" }}
-        slotProps={{
-          paper: {
-            sx: {
-              width: 250,
-              mt: -1,
-              ml: -1,
-              p: 1,
-              borderRadius: "18px",
-              backgroundColor: "rgba(248, 250, 248, 0.92)",
-              backdropFilter: "blur(16px)",
-              border: "1px solid rgba(193, 200, 193, 0.26)",
-              boxShadow: "0 24px 40px rgba(25, 28, 27, 0.12)",
+      {!isMobile ? (
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          MenuListProps={
+            { "data-testid": "rhythm-menu" } as HTMLAttributes<HTMLUListElement>
+          }
+          anchorOrigin={{ vertical: "top", horizontal: "left" }}
+          transformOrigin={{ vertical: "bottom", horizontal: "right" }}
+          slotProps={{
+            paper: {
+              sx: {
+                width: 250,
+                mt: -1,
+                ml: -1,
+                p: 1,
+                borderRadius: "18px",
+                backgroundColor: "rgba(248, 250, 248, 0.92)",
+                backdropFilter: "blur(16px)",
+                border: "1px solid rgba(193, 200, 193, 0.26)",
+                boxShadow: "0 24px 40px rgba(25, 28, 27, 0.12)",
+              },
             },
-          },
-        }}
-      >
-        {RHYTHM_OPTIONS.map((option) => {
-          const selected = option.value === rhythmMode;
-          return (
-            <ListItemButton
-              key={option.value}
-              selected={selected}
-              onClick={() => handleSelect(option.value)}
-              data-testid={`rhythm-option-${option.value}`}
-              data-selected={selected ? "true" : "false"}
-              sx={{
-                borderRadius: "14px",
-                mb: 0.5,
-                px: 1.5,
-                py: 1.25,
-                alignItems: "center",
-                "&.Mui-selected": {
-                  backgroundColor: "rgba(165, 216, 152, 0.22)",
-                },
-                "&.Mui-selected:hover": {
-                  backgroundColor: "rgba(165, 216, 152, 0.3)",
-                },
-              }}
-            >
-              <Box sx={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 2 }}>
-                <span className={optionText}>
-                  <Typography sx={{ fontSize: "0.92rem", fontWeight: 700, color: "#191c1b" }}>
-                    {option.label}
-                  </Typography>
-                  <Typography sx={{ fontSize: "0.7rem", fontWeight: 600, color: "rgba(85, 97, 88, 0.88)" }}>
-                    {option.caption}
-                  </Typography>
-                </span>
-                <Box sx={{ color: selected ? "#3b6934" : "rgba(113, 121, 115, 0.82)", display: "flex", alignItems: "center" }}>
-                  {getRhythmIcon(option.value)}
-                </Box>
-              </Box>
-            </ListItemButton>
-          );
-        })}
-      </Menu>
-
-      <Drawer
-        anchor="bottom"
-        open={drawerOpen}
-        onClose={handleClose}
-        PaperProps={{
-          "data-testid": "rhythm-drawer",
-          sx: {
-            borderTopLeftRadius: "24px",
-            borderTopRightRadius: "24px",
-            backgroundColor: "#f8faf8",
-            px: 0,
-          },
-        }}
-      >
-        <div className={drawerBody}>
-          <div className={drawerHandle} />
-          <Typography sx={{ px: 1.5, pb: 1.5, fontSize: "0.78rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#717973" }}>
-            {drawerTitle}
-          </Typography>
+          }}
+        >
           {RHYTHM_OPTIONS.map((option) => {
             const selected = option.value === rhythmMode;
             return (
@@ -225,37 +166,100 @@ const RhythmControl = () => {
                 data-testid={`rhythm-option-${option.value}`}
                 data-selected={selected ? "true" : "false"}
                 sx={{
-                  borderRadius: "16px",
-                  mb: 0.75,
+                  borderRadius: "14px",
+                  mb: 0.5,
                   px: 1.5,
-                  py: 1.35,
+                  py: 1.25,
+                  alignItems: "center",
                   "&.Mui-selected": {
                     backgroundColor: "rgba(165, 216, 152, 0.22)",
                   },
+                  "&.Mui-selected:hover": {
+                    backgroundColor: "rgba(165, 216, 152, 0.3)",
+                  },
                 }}
               >
-                <ListItemText
-                  primary={option.label}
-                  secondary={option.caption}
-                  primaryTypographyProps={{
-                    fontSize: "0.96rem",
-                    fontWeight: 700,
-                    color: "#191c1b",
-                  }}
-                  secondaryTypographyProps={{
-                    fontSize: "0.74rem",
-                    fontWeight: 600,
-                    color: "rgba(85, 97, 88, 0.88)",
-                  }}
-                />
-                <Box sx={{ color: selected ? "#3b6934" : "rgba(113, 121, 115, 0.82)", display: "flex", alignItems: "center", pl: 1.5 }}>
-                  {getRhythmIcon(option.value)}
+                <Box sx={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 2 }}>
+                  <span className={optionText}>
+                    <Typography sx={{ fontSize: "0.92rem", fontWeight: 700, color: "#191c1b" }}>
+                      {option.label}
+                    </Typography>
+                    <Typography sx={{ fontSize: "0.7rem", fontWeight: 600, color: "rgba(85, 97, 88, 0.88)" }}>
+                      {option.caption}
+                    </Typography>
+                  </span>
+                  <Box sx={{ color: selected ? "#3b6934" : "rgba(113, 121, 115, 0.82)", display: "flex", alignItems: "center" }}>
+                    {getRhythmIcon(option.value)}
+                  </Box>
                 </Box>
               </ListItemButton>
             );
           })}
-        </div>
-      </Drawer>
+        </Menu>
+      ) : (
+        <SwipeableDrawer
+          anchor="bottom"
+          open={drawerOpen}
+          onClose={handleClose}
+          onOpen={() => setDrawerOpen(true)}
+          disableSwipeToOpen
+          PaperProps={{
+            "data-testid": "rhythm-drawer",
+            sx: {
+              borderTopLeftRadius: "24px",
+              borderTopRightRadius: "24px",
+              backgroundColor: "#f8faf8",
+              px: 0,
+            },
+          }}
+        >
+          <div className={drawerBody}>
+            <div className={drawerHandle} />
+            <Typography sx={{ px: 1.5, pb: 1.5, fontSize: "0.78rem", fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#717973" }}>
+              {drawerTitle}
+            </Typography>
+            {RHYTHM_OPTIONS.map((option) => {
+              const selected = option.value === rhythmMode;
+              return (
+                <ListItemButton
+                  key={option.value}
+                  selected={selected}
+                  onClick={() => handleSelect(option.value)}
+                  data-testid={`rhythm-option-${option.value}`}
+                  data-selected={selected ? "true" : "false"}
+                  sx={{
+                    borderRadius: "16px",
+                    mb: 0.75,
+                    px: 1.5,
+                    py: 1.35,
+                    "&.Mui-selected": {
+                      backgroundColor: "rgba(165, 216, 152, 0.22)",
+                    },
+                  }}
+                >
+                  <ListItemText
+                    primary={option.label}
+                    secondary={option.caption}
+                    primaryTypographyProps={{
+                      fontSize: "0.96rem",
+                      fontWeight: 700,
+                      color: "#191c1b",
+                    }}
+                    secondaryTypographyProps={{
+                      fontSize: "0.74rem",
+                      fontWeight: 600,
+                      color: "rgba(85, 97, 88, 0.88)",
+                    }}
+                  />
+                  <Box sx={{ color: selected ? "#3b6934" : "rgba(113, 121, 115, 0.82)", display: "flex", alignItems: "center", pl: 1.5 }}>
+                    {getRhythmIcon(option.value)}
+                  </Box>
+                </ListItemButton>
+              );
+            })}
+          </div>
+        </SwipeableDrawer>
+      )}
 
       <Typography
         data-testid="rhythm-current-label"

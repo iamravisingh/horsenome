@@ -25,7 +25,7 @@ For local E2E runs, the test server uses a fixed host and port:
 pnpm dev:test
 ```
 
-This starts Vite on `http://127.0.0.1:4173`.
+This starts Vite on port `3000`.
 
 To serve the built app on the same host and port, use:
 
@@ -47,6 +47,10 @@ Cypress:
 pnpm cy:open
 pnpm cy:run
 pnpm cy:headless
+pnpm cy:run:local
+pnpm cy:run:prod
+pnpm cy:open:local
+pnpm cy:open:prod
 pnpm test:e2e
 ```
 
@@ -55,7 +59,11 @@ Command intent:
 - `pnpm cy:open`: open Cypress locally in interactive mode
 - `pnpm cy:run`: run Cypress headless
 - `pnpm cy:headless`: explicit alias for headless Cypress
-- `pnpm test:e2e`: start the Vite preview server, wait for readiness, then run Cypress
+- `pnpm cy:run:local`: run Cypress against the local dev target
+- `pnpm cy:run:prod`: run Cypress against `https://www.horsenome.com`
+- `pnpm cy:open:local`: start the dedicated Cypress dev server on `127.0.0.1:3000` and open Cypress against the local dev target
+- `pnpm cy:open:prod`: open Cypress against `https://www.horsenome.com`
+- `pnpm test:e2e`: start the dedicated Cypress dev server on port `3000`, wait for readiness, then run Cypress
 
 ## App Structure
 
