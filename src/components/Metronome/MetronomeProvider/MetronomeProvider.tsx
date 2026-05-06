@@ -29,6 +29,18 @@ const SUBDIVISION_VOLUME_RATIO = 0.32;
 const ENCOURAGEMENT_MILESTONE_SECONDS = 5 * 60;
 const DEFAULT_SESSION_SECONDS = 0;
 
+type WakeLockSentinelLike = {
+  release: () => Promise<void>;
+  addEventListener?: (type: "release", listener: () => void, options?: { once?: boolean }) => void;
+  removeEventListener?: (type: "release", listener: () => void) => void;
+};
+
+type WakeLockNavigator = Navigator & {
+  wakeLock?: {
+    request: (type: "screen") => Promise<WakeLockSentinelLike>;
+  };
+};
+
 export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const {
     initialLabel,
@@ -41,7 +53,8 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
   const {
     completionMessage,
     completionTitle,
-    encouragementBodies,
+    milestoneFallbackMessages,
+    milestoneMessages,
     milestoneTitleSuffix,
   } = strings.metronome.timerControl;
   const [bpm, setBpmState] = useState(120);
@@ -76,24 +89,42 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
   const sessionStartedAtRef = useRef<number | null>(null);
   const sessionCompletionShownRef = useRef(false);
   const lastMilestoneRef = useRef(0);
+  const wakeLockRef = useRef<WakeLockSentinelLike | null>(null);
   const encouragementAudioContextRef = useRef<AudioContext | null>(null);
   const rhythmPattern = getRhythmPattern(rhythmMode);
   const subdivisionCount = getSubdivisionCount(rhythmMode);
 
-  const tickSound = useRef(
-    new Howl({ src: ["/sounds/tick.mp3"], preload: true, html5: true })
-  ).current;
-  const tockSound = useRef(
-    new Howl({ src: ["/sounds/tock.mp3"], preload: true, html5: true })
-  ).current;
-  const subdivisionSound = useRef(
-    new Howl({
+  const tickSoundRef = useRef<Howl | null>(null);
+  if (!tickSoundRef.current) {
+    tickSoundRef.current = new Howl({
+      src: ["/sounds/tick.mp3"],
+      preload: true,
+      html5: true,
+    });
+  }
+
+  const tockSoundRef = useRef<Howl | null>(null);
+  if (!tockSoundRef.current) {
+    tockSoundRef.current = new Howl({
+      src: ["/sounds/tock.mp3"],
+      preload: true,
+      html5: true,
+    });
+  }
+
+  const subdivisionSoundRef = useRef<Howl | null>(null);
+  if (!subdivisionSoundRef.current) {
+    subdivisionSoundRef.current = new Howl({
       src: ["/sounds/tock.mp3"],
       preload: true,
       html5: true,
       volume: SUBDIVISION_VOLUME_RATIO,
-    })
-  ).current;
+    });
+  }
+
+  const tickSound = tickSoundRef.current;
+  const tockSound = tockSoundRef.current;
+  const subdivisionSound = subdivisionSoundRef.current;
 
   const pushHistory = useCallback((entry: Omit<HistoryEntry, "id">) => {
     const timestamp = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -167,10 +198,71 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
     [playEncouragementCue]
   );
 
+  const getMilestoneMessage = useCallback((minutes: number) => {
+    const exactMatch = milestoneMessages.find((entry) => entry.atMinutes === minutes);
+    if (exactMatch) {
+      return exactMatch.message;
+    }
+
+    const highestScriptedMilestone = milestoneMessages[milestoneMessages.length - 1]?.atMinutes ?? 0;
+    if (minutes > highestScriptedMilestone) {
+      const overflowStepIndex = Math.floor((minutes - highestScriptedMilestone - 1) / 5)
+        % milestoneFallbackMessages.length;
+      return milestoneFallbackMessages[overflowStepIndex] ?? milestoneFallbackMessages[0];
+    }
+
+    const lowerBoundMatch = [...milestoneMessages].reverse().find((entry) => minutes >= entry.atMinutes);
+
+    if (lowerBoundMatch) {
+      return lowerBoundMatch.message;
+    }
+
+    const fallbackIndex = Math.max(0, Math.floor(minutes / 5) - 1) % milestoneFallbackMessages.length;
+    return milestoneFallbackMessages[fallbackIndex] ?? milestoneFallbackMessages[0];
+  }, [milestoneFallbackMessages, milestoneMessages]);
+
   const clearPlaybackTimer = useCallback(() => {
-    if (timeoutRef.current) {
+    if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
+    }
+  }, []);
+
+  const requestWakeLock = useCallback(async () => {
+    if (typeof document === "undefined" || document.visibilityState !== "visible") {
+      return;
+    }
+
+    const wakeLockNavigator = navigator as WakeLockNavigator;
+    if (!wakeLockNavigator.wakeLock || wakeLockRef.current) {
+      return;
+    }
+
+    try {
+      const wakeLock = await wakeLockNavigator.wakeLock.request("screen");
+      wakeLock.addEventListener?.("release", () => {
+        if (wakeLockRef.current === wakeLock) {
+          wakeLockRef.current = null;
+        }
+      }, { once: true });
+      wakeLockRef.current = wakeLock;
+    } catch {
+      wakeLockRef.current = null;
+    }
+  }, []);
+
+  const releaseWakeLock = useCallback(async () => {
+    const currentWakeLock = wakeLockRef.current;
+    wakeLockRef.current = null;
+
+    if (!currentWakeLock) {
+      return;
+    }
+
+    try {
+      await currentWakeLock.release();
+    } catch {
+      // Ignore release failures. A stale sentinel is harmless once cleared locally.
     }
   }, []);
 
@@ -211,6 +303,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
         detail: getPlaybackDetail(timeSignature.beats, timeSignature.unit, bpm, rhythmMode),
         tone: "neutral",
       });
+      void releaseWakeLock();
     },
     [
       bpm,
@@ -219,6 +312,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
       pushHistory,
       resetSessionProgress,
       rhythmMode,
+      releaseWakeLock,
       stoppedLabel,
       timeSignature.beats,
       timeSignature.unit,
@@ -254,8 +348,7 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
       const minutes = nextElapsed / 60;
       if (minutes !== lastMilestoneRef.current) {
         lastMilestoneRef.current = minutes;
-        const bodyIndex = (Math.floor(minutes / 5) - 1) % encouragementBodies.length;
-        const body = encouragementBodies[bodyIndex] ?? encouragementBodies[0];
+        const body = getMilestoneMessage(minutes);
         showEncouragement("milestone", `${minutes} ${milestoneTitleSuffix}`, body);
       }
     }
@@ -276,16 +369,14 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
   }, [
     completionMessage,
     completionTitle,
-    encouragementBodies,
+    getMilestoneMessage,
     milestoneTitleSuffix,
     showEncouragement,
   ]);
 
   const playPulse = useCallback(() => {
     const pulseTimestamp = performance.now();
-    if (syncSessionProgress(pulseTimestamp)) {
-      return;
-    }
+    syncSessionProgress(pulseTimestamp);
 
     const subdivisionIndex = subdivisionStepRef.current;
     const isSubdivision = subdivisionIndex > 0;
@@ -347,12 +438,14 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
       detail: getPlaybackDetail(timeSignature.beats, timeSignature.unit, bpm, rhythmMode),
       tone: "success",
     });
+    void requestWakeLock();
   }, [
     bpm,
     getPlaybackDetail,
     isRunning,
     playPulse,
     pushHistory,
+    requestWakeLock,
     rhythmMode,
     resetSessionProgress,
     scheduleNextPulse,
@@ -456,11 +549,36 @@ export const MetronomeProvider: FC<{ children: ReactNode }> = ({ children }) => 
 
   useEffect(() => {
     return () => {
+      void releaseWakeLock();
       if (encouragementAudioContextRef.current) {
         void encouragementAudioContextRef.current.close();
       }
     };
-  }, []);
+  }, [releaseWakeLock]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return undefined;
+    }
+
+    const handleVisibilityChange = () => {
+      if (!isRunning) {
+        return;
+      }
+
+      if (document.visibilityState === "visible") {
+        void requestWakeLock();
+        return;
+      }
+
+      void releaseWakeLock();
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [isRunning, releaseWakeLock, requestWakeLock, scheduleNextPulse]);
 
   return (
     <metronomeContext.Provider

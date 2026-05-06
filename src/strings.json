@@ -65,11 +65,18 @@
       "completionTitle": "Session complete",
       "completionMessage": "Strong work. Take a breath and go again when ready.",
       "milestoneTitleSuffix": "minutes in",
-      "encouragementBodies": [
-        "Strong work. Keep the pulse steady.",
-        "You are locked in. Stay with the groove.",
-        "Nice consistency. Let the rhythm breathe.",
-        "You are doing great. Keep going."
+      "milestoneMessages": [
+        { "atMinutes": 5, "message": "Five minutes in. The pulse is settling under your hands." },
+        { "atMinutes": 10, "message": "Ten minutes in. Stay loose and keep the groove breathing." },
+        { "atMinutes": 15, "message": "Fifteen minutes in. Your consistency is doing the work now." },
+        { "atMinutes": 20, "message": "Twenty minutes in. Hold the center and keep the cycle clean." },
+        { "atMinutes": 25, "message": "Twenty-five minutes in. The focus is there. Keep it steady." },
+        { "atMinutes": 30, "message": "Thirty minutes in. Strong practice. Let the rhythm keep opening up." }
+      ],
+      "milestoneFallbackMessages": [
+        "Keep going. The pulse is staying with you.",
+        "Good work. Stay patient and keep the cycle even.",
+        "You are in it now. Let the groove keep breathing."
       ]
     },
     "bpmControl": {
