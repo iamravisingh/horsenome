@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/iamravisingh/horsenome/compare/horsenome-v1.4.0...horsenome-v1.4.1) (2026-05-06)
+
+
+### Bug Fixes
+
+* changed app favicon icon and updated license ([#20](https://github.com/iamravisingh/horsenome/issues/20)) ([019661b](https://github.com/iamravisingh/horsenome/commit/019661b72aac1ac1b59a18f3110894ae3ae2f04c))
+
 ## [1.4.0](https://github.com/iamravisingh/horsenome/compare/horsenome-v1.3.0...horsenome-v1.4.0) (2026-05-04)
 
 
