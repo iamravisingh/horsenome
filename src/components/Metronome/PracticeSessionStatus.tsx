@@ -36,7 +36,7 @@ const confettiPiece = css`
   will-change: transform, opacity;
 `;
 
-const confettiPieces = [
+const completionConfettiPieces = [
   { left: "8vw", width: 10, height: 18, color: "#3b6934", rotate: -18, delay: 0 },
   { left: "14vw", width: 9, height: 9, color: "#efd48b", rotate: 16, delay: 0.08 },
   { left: "23vw", width: 8, height: 16, color: "#a5d898", rotate: -10, delay: 0.15 },
@@ -59,6 +59,17 @@ const confettiPieces = [
   { left: "96vw", width: 9, height: 15, color: "#c8e1c1", rotate: -18, delay: 0.21 },
 ] as const;
 
+const milestoneConfettiPieces = [
+  { left: "10vw", width: 8, height: 14, color: "#3b6934", rotate: -14, delay: 0 },
+  { left: "22vw", width: 7, height: 12, color: "#efd48b", rotate: 18, delay: 0.06 },
+  { left: "34vw", width: 8, height: 8, color: "#a5d898", rotate: -8, delay: 0.12 },
+  { left: "46vw", width: 9, height: 15, color: "#3b6934", rotate: 24, delay: 0.04 },
+  { left: "58vw", width: 7, height: 11, color: "#c8e1c1", rotate: -12, delay: 0.1 },
+  { left: "70vw", width: 8, height: 14, color: "#efd48b", rotate: 14, delay: 0.15 },
+  { left: "82vw", width: 9, height: 9, color: "#a5d898", rotate: -18, delay: 0.08 },
+  { left: "92vw", width: 8, height: 13, color: "#3b6934", rotate: 16, delay: 0.18 },
+] as const;
+
 const formatCountdown = (totalSeconds: number) => {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
@@ -69,6 +80,8 @@ const PracticeSessionStatus = () => {
   const { countdownSuffix } = strings.metronome.timerControl;
   const { dismissEncouragement, encouragementNotice, isRunning, remainingSeconds } = useMetronome();
   const isCompletion = encouragementNotice?.kind === "completion";
+  const shouldShowConfetti = Boolean(encouragementNotice);
+  const confettiPieces = isCompletion ? completionConfettiPieces : milestoneConfettiPieces;
   const countdownLabel = useMemo(() => {
     if (!isRunning || remainingSeconds === null) {
       return null;
@@ -126,7 +139,7 @@ const PracticeSessionStatus = () => {
         ) : null}
       </AnimatePresence>
 
-      {isCompletion && encouragementNotice ? (
+      {shouldShowConfetti && encouragementNotice ? (
         <>
           <div className={celebrationOverlay} data-testid="completion-celebration" aria-hidden="true">
             {confettiPieces.map((piece, index) => (
@@ -142,13 +155,15 @@ const PracticeSessionStatus = () => {
                 initial={{ opacity: 0, y: -24, rotate: piece.rotate, scale: 0.72 }}
                 animate={{
                   opacity: [0, 1, 1, 0],
-                  y: [-24, 110, 280, 540],
+                  y: isCompletion ? [-24, 110, 280, 540] : [-24, 90, 210, 380],
                   x: [0, index % 2 === 0 ? -18 : 18, index % 2 === 0 ? 12 : -12],
-                  rotate: [piece.rotate, piece.rotate + 110, piece.rotate + 220],
-                  scale: [0.72, 1, 0.92],
+                  rotate: isCompletion
+                    ? [piece.rotate, piece.rotate + 110, piece.rotate + 220]
+                    : [piece.rotate, piece.rotate + 70, piece.rotate + 120],
+                  scale: isCompletion ? [0.72, 1, 0.92] : [0.72, 0.94, 0.86],
                 }}
                 transition={{
-                  duration: 3,
+                  duration: isCompletion ? 3 : 2.2,
                   delay: piece.delay,
                   ease: "easeOut",
                 }}
